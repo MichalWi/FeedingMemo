@@ -8,9 +8,19 @@
 
 import UIKit
 import CircleMenu
+import fluid_slider
 
 struct defaultsKeys {
     static let dataKey = "feedingDataKey"
+}
+
+struct consts {
+    static let maxFeedingTime = CGFloat(90)
+}
+
+struct FeedSession {
+    let end : Date
+    let duration : DateInterval
 }
 
 class TableViewController: UITableViewController, CircleMenuDelegate {
@@ -21,6 +31,11 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     
     var feedData : NSMutableArray = NSMutableArray.init()
+    var slider: Slider = Slider()
+    
+    let formatter = DateFormatter()
+    let sliderFormatter = NumberFormatter()
+    
     let cellReuseIdentifier = "cell"
     let dataKey = "feedingArray"
     
@@ -30,31 +45,67 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         initDataSource()
         
+        //debug clear
+        feedData.removeAllObjects()
+        persistDataSource()
+        self.tableView.reloadData()
+        //end debug clear
+        
+        
         formatter.dateFormat = "HH:mm"
         
+        sliderFormatter.maximumIntegerDigits = 3
+        sliderFormatter.maximumFractionDigits = 0
+        
+        initComponents()
+        
+    }
+    
+    func initComponents(){
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
         
+        // circle button
         let button = CircleMenu(
-            frame: CGRect(x: (view.frame.width / 2) - 25, y: view.frame.height - 200, width: 50, height: 50),
+            frame: CGRect(x: (view.frame.width / 2) - 25, y: view.frame.height - 100, width: 50, height: 50),
             normalIcon:"plus_filled",
             selectedIcon:"baby",
             buttonsCount: 2,
-            duration: 0.15,
+            duration: 0.35,
             distance: 110)
         button.subButtonsRadius = 30
         button.delegate = self
         button.startAngle = -50
         button.endAngle = 50
-        button.layer.cornerRadius = button.frame.size.width / 2.0 
-      
+        button.layer.cornerRadius = button.frame.size.width / 2.0
         
         view.addSubview(button)
         
         
-    } 
+        //slider
+        slider = Slider()
+        slider.frame = CGRect(x: 25, y: view.frame.height - 200, width: view.frame.width - 50, height: 50)
+        slider.attributedTextForFraction = { fraction in
+           
+            let string = (self.sliderFormatter.string(from: (fraction * consts.maxFeedingTime) as NSNumber) ?? "")
+            return NSAttributedString(string: string)
+        }
+        slider.setMinimumLabelAttributedText(NSAttributedString(string: "0"))
+        slider.setMaximumLabelAttributedText(NSAttributedString(string: "90"))
+        slider.fraction = 0.5
+        slider.shadowOffset = CGSize(width: 0, height: 10)
+        slider.shadowBlur = 5
+        slider.shadowColor = UIColor(white: 0, alpha: 0.1)
+        slider.contentViewColor = .orange
+        slider.valueViewColor = .white
+       
+        view.addSubview(slider)
+        slider.isHidden = true;
+    }
+    
+    
     
      func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int) {
         if atIndex == 0 {
@@ -72,6 +123,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         if atIndex == 1{
             addRight()
         }
+        
+        showTimeButton()
+    }
+    
+    private func showTimeButton(){
+        slider.isHidden = false;
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -104,19 +161,32 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         }
     }
     
-    let formatter = DateFormatter()
    
     
     private func addLeft(){
-        feedData.add("\(formatter.string(from: Date())) Lewa")
-        persistDataSource()
-        self.tableView.reloadData()
+        slider.didEndTracking = { (slider) -> () in
+            slider.isHidden = true;
+            
+            let feedDuration = (self.sliderFormatter.string(from: (slider.fraction * consts.maxFeedingTime) as NSNumber) ?? "")
+            let feedText = "\(self.formatter.string(from: Date())) Lewa " + "\(feedDuration) min"
+            
+            self.feedData.add(feedText)
+            self.persistDataSource()
+            self.tableView.reloadData()
+        }
+      
         
     }
     private func  addRight(){
-        feedData.add("\(formatter.string(from: Date())) Prawa")
-        persistDataSource()
-        self.tableView.reloadData()
+        slider.didEndTracking = { (slider) -> () in
+            slider.isHidden = true;
+            let feedDuration = (self.sliderFormatter.string(from: (slider.fraction * consts.maxFeedingTime) as NSNumber) ?? "")
+            let feedText = "\(self.formatter.string(from: Date())) Prawa " + "\(feedDuration) min"
+            
+            self.feedData.add(feedText)
+            self.persistDataSource()
+            self.tableView.reloadData()
+        }
     }
     
     private func persistDataSource(){

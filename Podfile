@@ -7,8 +7,9 @@ target 'Feeding Memo' do
 
   # Pods for Feeding Memo
   pod 'CircleMenu'
+  pod 'fluid-slider'
   
-  swift_4_1_pod_targets = ['CircleMenu']
+  swift_4_1_pod_targets = ['CircleMenu', 'fluid-slider']
   
   post_install do | installer |
       installer.pods_project.targets.each do |target|

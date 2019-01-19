@@ -1,16 +1,24 @@
 PODS:
   - CircleMenu (3.1.0)
+  - fluid-slider (0.0.6):
+    - pop
+  - pop (1.0.10)
 
 DEPENDENCIES:
   - CircleMenu
+  - fluid-slider
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CircleMenu
+    - fluid-slider
+    - pop
 
 SPEC CHECKSUMS:
   CircleMenu: 290ce681d09d0c023600e2588e89a111c0be3b2d
+  fluid-slider: 51151aa6e1bc834e34992163689e33db5cb2044f
+  pop: 2e49064438d90f0429787015f57077a30e6a4f72
 
-PODFILE CHECKSUM: 7af9b026564f2b90f2c486abddc363f05a545a14
+PODFILE CHECKSUM: 644c0f6e4a2918c45bb3064844fa0c2c162600b7
 
 COCOAPODS: 1.5.3
