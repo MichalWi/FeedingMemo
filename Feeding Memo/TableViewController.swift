@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import CircleMenu
 
 struct defaultsKeys {
     static let dataKey = "feedingDataKey"
 }
 
-class TableViewController: UITableViewController {
+class TableViewController: UITableViewController, CircleMenuDelegate {
  
   
     //todo later adv structure
@@ -29,16 +30,48 @@ class TableViewController: UITableViewController {
         
         initDataSource()
         
-        //debug init remove
-        initDebugData()
-         // end debug
-        
+        formatter.dateFormat = "HH:mm"
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
         
+        let button = CircleMenu(
+            frame: CGRect(x: (view.frame.width / 2) - 25, y: view.frame.height - 200, width: 50, height: 50),
+            normalIcon:"plus_filled",
+            selectedIcon:"baby",
+            buttonsCount: 2,
+            duration: 0.15,
+            distance: 110)
+        button.subButtonsRadius = 30
+        button.delegate = self
+        button.startAngle = -50
+        button.endAngle = 50
+        button.layer.cornerRadius = button.frame.size.width / 2.0 
+      
+        
+        view.addSubview(button)
+        
+        
+    } 
+    
+     func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int) {
+        if atIndex == 0 {
+            button.setImage(#imageLiteral(resourceName: "left_footprint"), for: .normal)
+        }
+        if atIndex == 1{
+            button.setImage(#imageLiteral(resourceName: "right_footprint"), for: .normal)
+        }
+    }
+    
+    func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
+        if atIndex == 0 {
+            addLeft();
+        }
+        if atIndex == 1{
+            addRight()
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -71,12 +104,19 @@ class TableViewController: UITableViewController {
         }
     }
     
-    private func initDebugData(){
+    let formatter = DateFormatter()
+   
+    
+    private func addLeft(){
+        feedData.add("\(formatter.string(from: Date())) Lewa")
+        persistDataSource()
+        self.tableView.reloadData()
         
-        if feedData.count == 0 {
-            feedData.addObjects(from: ["11:30 Lewa",                                  "12:30 Prawa","13:30 Lewa","14:30 Lewa"])
-            persistDataSource()
-        }
+    }
+    private func  addRight(){
+        feedData.add("\(formatter.string(from: Date())) Prawa")
+        persistDataSource()
+        self.tableView.reloadData()
     }
     
     private func persistDataSource(){
