@@ -89,7 +89,7 @@ class TableViewController: UITableViewController {
         defaults.set(self.feedData, forKey: defaultsKeys.dataKey);
     }
     
-    private func initDataSource(){ 
+    private func initDataSource(){
         let defaults = UserDefaults.standard
         feedData = defaults.mutableArrayValue(forKey: defaultsKeys.dataKey);
     }
