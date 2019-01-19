@@ -31,13 +31,13 @@ class TableViewController: UITableViewController {
         
         //debug init remove
         initDebugData()
+         // end debug
         
-  
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
-     
         
     }
     
@@ -55,11 +55,7 @@ class TableViewController: UITableViewController {
         return cell
     }
     
-    private func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath)
-    {
-        print("You tapped cell number \(indexPath.row).")
-    }
-    
+   
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -78,7 +74,7 @@ class TableViewController: UITableViewController {
     private func initDebugData(){
         
         if feedData.count == 0 {
-            feedData.addObjects(from: ["Horse", "Cow", "Camel", "Sheep", "Goat"])
+            feedData.addObjects(from: ["11:30 Lewa",                                  "12:30 Prawa","13:30 Lewa","14:30 Lewa"])
             persistDataSource()
         }
     }
