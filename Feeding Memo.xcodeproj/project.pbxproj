@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56B10B014528DDE216AAFABA /* Pods_Feeding_Memo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */; };
 		E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697621F32DF200771BAD /* AppDelegate.swift */; };
 		E76E697921F32DF200771BAD /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697821F32DF200771BAD /* TableViewController.swift */; };
 		E76E697C21F32DF200771BAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76E697A21F32DF200771BAD /* Main.storyboard */; };
@@ -16,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Feeding_Memo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AFC7FA18D9C45C58BC5EE06 /* Pods-Feeding Memo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.release.xcconfig"; sourceTree = "<group>"; };
+		A77B775CCF2AD5F46900338B /* Pods-Feeding Memo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.debug.xcconfig"; sourceTree = "<group>"; };
 		E76E697321F32DF100771BAD /* Feeding Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Feeding Memo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E76E697621F32DF200771BAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E76E697821F32DF200771BAD /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
@@ -31,17 +35,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56B10B014528DDE216AAFABA /* Pods_Feeding_Memo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		221250233E87CCE0C796BC7F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD55CA5927AF210A07B0A05C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A77B775CCF2AD5F46900338B /* Pods-Feeding Memo.debug.xcconfig */,
+				5AFC7FA18D9C45C58BC5EE06 /* Pods-Feeding Memo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		E76E696A21F32DF100771BAD = {
 			isa = PBXGroup;
 			children = (
 				E76E697521F32DF100771BAD /* Feeding Memo */,
 				E76E697421F32DF100771BAD /* Products */,
+				AD55CA5927AF210A07B0A05C /* Pods */,
+				221250233E87CCE0C796BC7F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,9 +98,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E76E698521F32DF700771BAD /* Build configuration list for PBXNativeTarget "Feeding Memo" */;
 			buildPhases = (
+				3C4A95DA2F54E0BAE5AC618B /* [CP] Check Pods Manifest.lock */,
 				E76E696F21F32DF100771BAD /* Sources */,
 				E76E697021F32DF100771BAD /* Frameworks */,
 				E76E697121F32DF100771BAD /* Resources */,
+				2251CCD2C9DFDD32AEE55FBD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +158,53 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2251CCD2C9DFDD32AEE55FBD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CircleMenu/CircleMenu.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CircleMenu.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3C4A95DA2F54E0BAE5AC618B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Feeding Memo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E76E696F21F32DF100771BAD /* Sources */ = {
@@ -284,6 +357,7 @@
 		};
 		E76E698621F32DF700771BAD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77B775CCF2AD5F46900338B /* Pods-Feeding Memo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -302,6 +376,7 @@
 		};
 		E76E698721F32DF700771BAD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5AFC7FA18D9C45C58BC5EE06 /* Pods-Feeding Memo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

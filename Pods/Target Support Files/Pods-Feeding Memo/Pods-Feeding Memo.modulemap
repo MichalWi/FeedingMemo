@@ -1,0 +1,6 @@
+framework module Pods_Feeding_Memo {
+  umbrella header "Pods-Feeding Memo-umbrella.h"
+
+  export *
+  module * { export * }
+}
