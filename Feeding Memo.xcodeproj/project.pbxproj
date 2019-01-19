@@ -14,6 +14,9 @@
 		E76E697E21F32DF700771BAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E76E697D21F32DF700771BAD /* Assets.xcassets */; };
 		E76E698121F32DF700771BAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76E697F21F32DF700771BAD /* LaunchScreen.storyboard */; };
 		E76E698921F33A5600771BAD /* TableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E698821F33A5600771BAD /* TableCellView.swift */; };
+		E76E698C21F3A2C200771BAD /* FeedingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E698B21F3A2C200771BAD /* FeedingSession.swift */; };
+		E76E698F21F3A3C700771BAD /* FeedingSessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E698E21F3A3C700771BAD /* FeedingSessionService.swift */; };
+		E76E699221F3B44F00771BAD /* HourFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E699121F3B44F00771BAD /* HourFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		E76E698021F32DF700771BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E76E698221F32DF700771BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E76E698821F33A5600771BAD /* TableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCellView.swift; sourceTree = "<group>"; };
+		E76E698B21F3A2C200771BAD /* FeedingSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedingSession.swift; sourceTree = "<group>"; };
+		E76E698E21F3A3C700771BAD /* FeedingSessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedingSessionService.swift; sourceTree = "<group>"; };
+		E76E699121F3B44F00771BAD /* HourFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,9 @@
 		E76E697521F32DF100771BAD /* Feeding Memo */ = {
 			isa = PBXGroup;
 			children = (
+				E76E699021F3B43B00771BAD /* Formatters */,
+				E76E698D21F3A2D400771BAD /* Service */,
+				E76E698A21F3A2A100771BAD /* Model */,
 				E76E697621F32DF200771BAD /* AppDelegate.swift */,
 				E76E697821F32DF200771BAD /* TableViewController.swift */,
 				E76E697A21F32DF200771BAD /* Main.storyboard */,
@@ -89,6 +98,30 @@
 				E76E698821F33A5600771BAD /* TableCellView.swift */,
 			);
 			path = "Feeding Memo";
+			sourceTree = "<group>";
+		};
+		E76E698A21F3A2A100771BAD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E76E698B21F3A2C200771BAD /* FeedingSession.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E76E698D21F3A2D400771BAD /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				E76E698E21F3A3C700771BAD /* FeedingSessionService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		E76E699021F3B43B00771BAD /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				E76E699121F3B44F00771BAD /* HourFormatter.swift */,
+			);
+			path = Formatters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,7 +248,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E76E699221F3B44F00771BAD /* HourFormatter.swift in Sources */,
 				E76E698921F33A5600771BAD /* TableCellView.swift in Sources */,
+				E76E698F21F3A3C700771BAD /* FeedingSessionService.swift in Sources */,
+				E76E698C21F3A2C200771BAD /* FeedingSession.swift in Sources */,
 				E76E697921F32DF200771BAD /* TableViewController.swift in Sources */,
 				E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */,
 			);

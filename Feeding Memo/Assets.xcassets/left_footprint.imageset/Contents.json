@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "left_footprint.png",
+      "filename" : "left.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "left_footprint-1.png",
+      "filename" : "left-1.png",
       "scale" : "2x"
     },
     {

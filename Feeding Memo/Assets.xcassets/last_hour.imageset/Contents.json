@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "left_shoe.png",
+      "filename" : "last_hour.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "left_shoe-1.png",
+      "filename" : "last_hour-1.png",
       "scale" : "2x"
     },
     {

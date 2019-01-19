@@ -15,57 +15,35 @@ struct defaultsKeys {
 }
 
 struct consts {
-    static let maxFeedingTime = CGFloat(90)
-}
-struct ApplcationData : Codable {
-    let feedSessions: [FeedSession]
-}
-struct FeedSession : Codable {
-    let end : Date
-    let duration : DateInterval
-    
-    var jsonRepresentation: [String: Any] {
-        return [
-            "end" : end,
-            "duration" : duration
-        ]
-    }
+    static let maxFeedingTime = 90
 }
 
+struct tableViewConsts {
+    static let bottomMargin : CGFloat = 150
+    
+    static let buttonSize : CGFloat = 50
+}
 
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
-  
-    //todo later adv structure
-    let dic:[Date: String] = [:]
+    let Service = FeedingSessionService()
     
     
-    var feedData : NSMutableArray = NSMutableArray.init()
+    var feedData : [FeedingSession] = []
+    
+    
+    //UI
     var slider: Slider = Slider()
+    var hint: UILabel = UILabel()
     
-    let formatter = DateFormatter()
-    let sliderFormatter = NumberFormatter()
     
     let cellReuseIdentifier = "cell"
-    let dataKey = "feedingArray"
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        initDataSource()
-        
-        //debug clear
-        feedData.removeAllObjects()
-        persistDataSource()
-        self.tableView.reloadData()
-        //end debug clear
-        
-        
-        formatter.dateFormat = "HH:mm"
-        
-        sliderFormatter.maximumIntegerDigits = 3
-        sliderFormatter.maximumFractionDigits = 0
+        reloadData()
         
         initComponents()
         
@@ -79,11 +57,11 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         // circle button
         let button = CircleMenu(
-            frame: CGRect(x: (view.frame.width / 2) - 25, y: view.frame.height - 100, width: 50, height: 50),
+            frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize),
             normalIcon:"plus_filled",
             selectedIcon:"baby",
             buttonsCount: 2,
-            duration: 0.35,
+            duration: 0.2,
             distance: 110)
         button.subButtonsRadius = 30
         button.delegate = self
@@ -95,23 +73,32 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         
         //slider
+        
         slider = Slider()
-        slider.frame = CGRect(x: 25, y: view.frame.height - 200, width: view.frame.width - 50, height: 50)
+        slider.frame = CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
         slider.attributedTextForFraction = { fraction in
-           
-            let string = (self.sliderFormatter.string(from: (fraction * consts.maxFeedingTime) as NSNumber) ?? "")
-            return NSAttributedString(string: string)
+            let string = "\(Int((fraction) * CGFloat(consts.maxFeedingTime))) min"
+            return NSAttributedString(string: string, attributes: [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.black])
+            
         }
-        slider.setMinimumLabelAttributedText(NSAttributedString(string: "0"))
-        slider.setMaximumLabelAttributedText(NSAttributedString(string: "90"))
+        let labelTextAttributes: [NSAttributedString.Key : Any] = [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.white]
+       
         slider.fraction = 0.5
         slider.shadowOffset = CGSize(width: 0, height: 10)
         slider.shadowBlur = 5
         slider.shadowColor = UIColor(white: 0, alpha: 0.1)
         slider.contentViewColor = .orange
         slider.valueViewColor = .white
+        slider.setMinimumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
+        slider.setMaximumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
+        
+        slider.imagesColor = UIColor.white.withAlphaComponent(0.8)
+        slider.valueViewColor = .white
+        slider.setMinimumImage(#imageLiteral(resourceName: "past"))
+        slider.setMaximumImage(#imageLiteral(resourceName: "future"))
        
         view.addSubview(slider)
+     
         slider.isHidden = true;
     }
     
@@ -124,21 +111,42 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         if atIndex == 1{
             button.setImage(#imageLiteral(resourceName: "right_footprint"), for: .normal)
         }
+        
+        button.backgroundColor = .orange
+        
+        
+        hint.removeFromSuperview()
+        hint = UILabel()
+        hint.text = "Select Side"
+        let w = hint.intrinsicContentSize.width
+        
+        hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 50), width: view.frame.width, height: 50)
+        
+        view.addSubview(hint)
+        
+        
     }
     
     func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
-        if atIndex == 0 {
-            addLeft();
-        }
-        if atIndex == 1{
-            addRight()
-        }
         
+         hint.removeFromSuperview()
+        
+        configureAddingFeedingSession(side:  atIndex == 0 ? .Left : .Right)
+       
         showTimeButton()
     }
     
     private func showTimeButton(){
-        slider.isHidden = false;
+        slider.isHidden = false
+        
+        hint.removeFromSuperview()
+        hint = UILabel()
+        hint.text = "Duration"
+        let w = hint.intrinsicContentSize.width
+      
+        hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 50), width: view.frame.width, height: 50)
+        
+        view.addSubview(hint)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -150,7 +158,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     {
         let cell:UITableViewCell = (tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell?)!
         
-        cell.textLabel?.text = feedData[indexPath.row] as? String
+        cell.textLabel?.text = feedData[indexPath.row].toTextRepresentation()
         
         return cell
     }
@@ -162,43 +170,31 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+       
+            let id = self.feedData[indexPath.row].Id
+            self.Service.RemoveFeedingSession(id)
             
-            self.feedData.removeObject(at: indexPath.row)
-            self.persistDataSource();
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.tableView.reloadData()
+            reloadData()
             
         }
     }
     
-    private func formatEntry(left : Bool) -> String{
-        let sideText = left ? "Left" : "Right"
-        let feedDuration = (slider.fraction * consts.maxFeedingTime) as NSNumber
-        let feedDurationText = (self.sliderFormatter.string(from: feedDuration) ?? "")
-        
-        let feedText = "\(self.formatter.string(from: Date.init(timeInterval: (TimeInterval(Int(truncating: feedDuration) * -60)), since: Date()))) - \(self.formatter.string(from: Date())) \(sideText) \(feedDurationText) min"
-        
-        return feedText;
+    
+    private func configureAddingFeedingSession(side : Side){
+        slider.didEndTracking = { (slider) -> () in
+            slider.isHidden = true;
+            
+            let newFeedingSession = FeedingSession.Create(side: side, duration: Int(slider.fraction * CGFloat(consts.maxFeedingTime)), endTime: Date())
+            
+            self.Service.AddFeedingSession(newFeedingSession)
+            
+            self.reloadData()
+            
+            self.hint.removeFromSuperview()
+            
+        }
     }
     
-    private func addLeft(){
-        slider.didEndTracking = { (slider) -> () in
-            slider.isHidden = true;
-            self.feedData.add(self.formatEntry(left: true))
-            self.persistDataSource()
-            self.tableView.reloadData()
-        }
-      
-        
-    }
-    private func  addRight(){
-        slider.didEndTracking = { (slider) -> () in
-            slider.isHidden = true;
-            self.feedData.add(self.formatEntry(left: false))
-            self.persistDataSource()
-            self.tableView.reloadData()
-        }
-    }
     
     private func persistDataSource(){
         
@@ -206,9 +202,11 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         defaults.set(self.feedData, forKey: defaultsKeys.dataKey);
     }
     
-    private func initDataSource(){
-        let defaults = UserDefaults.standard
-        feedData = defaults.mutableArrayValue(forKey: defaultsKeys.dataKey);
+    private func reloadData(){
+        
+        feedData = Service.GetFeedingSessions()
+        self.tableView.reloadData()
+      
     }
 }
 
