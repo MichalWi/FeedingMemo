@@ -17,11 +17,21 @@ struct defaultsKeys {
 struct consts {
     static let maxFeedingTime = CGFloat(90)
 }
-
-struct FeedSession {
+struct ApplcationData : Codable {
+    let feedSessions: [FeedSession]
+}
+struct FeedSession : Codable {
     let end : Date
     let duration : DateInterval
+    
+    var jsonRepresentation: [String: Any] {
+        return [
+            "end" : end,
+            "duration" : duration
+        ]
+    }
 }
+
 
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
@@ -161,16 +171,20 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         }
     }
     
-   
+    private func formatEntry(left : Bool) -> String{
+        let sideText = left ? "Left" : "Right"
+        let feedDuration = (slider.fraction * consts.maxFeedingTime) as NSNumber
+        let feedDurationText = (self.sliderFormatter.string(from: feedDuration) ?? "")
+        
+        let feedText = "\(self.formatter.string(from: Date.init(timeInterval: (TimeInterval(Int(truncating: feedDuration) * -60)), since: Date()))) - \(self.formatter.string(from: Date())) \(sideText) \(feedDurationText) min"
+        
+        return feedText;
+    }
     
     private func addLeft(){
         slider.didEndTracking = { (slider) -> () in
             slider.isHidden = true;
-            
-            let feedDuration = (self.sliderFormatter.string(from: (slider.fraction * consts.maxFeedingTime) as NSNumber) ?? "")
-            let feedText = "\(self.formatter.string(from: Date())) Lewa " + "\(feedDuration) min"
-            
-            self.feedData.add(feedText)
+            self.feedData.add(self.formatEntry(left: true))
             self.persistDataSource()
             self.tableView.reloadData()
         }
@@ -180,10 +194,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     private func  addRight(){
         slider.didEndTracking = { (slider) -> () in
             slider.isHidden = true;
-            let feedDuration = (self.sliderFormatter.string(from: (slider.fraction * consts.maxFeedingTime) as NSNumber) ?? "")
-            let feedText = "\(self.formatter.string(from: Date())) Prawa " + "\(feedDuration) min"
-            
-            self.feedData.add(feedText)
+            self.feedData.add(self.formatEntry(left: false))
             self.persistDataSource()
             self.tableView.reloadData()
         }
