@@ -6,51 +6,106 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Feeding_Memo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
-        <!--Table View Controller-->
+        <!--Feeding list-->
         <scene sceneID="8k1-y7-ROZ">
             <objects>
-                <tableViewController id="ZYK-r8-M7u" customClass="TableViewController" customModule="Feeding_Memo" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Ba-Ed-JiG">
+                <tableViewController title="Feeding list" id="ZYK-r8-M7u" customClass="TableViewController" customModule="Feeding_Memo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Ba-Ed-JiG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.69411764710000001" green="0.83921568629999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="LHN-oM-Ie4" style="IBUITableViewCellStyleDefault" id="Qjj-tS-tUH">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellId" rowHeight="71" id="Qjj-tS-tUH" customClass="TableCellView" customModule="Feeding_Memo" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="71"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qjj-tS-tUH" id="m7O-I3-1c2" customClass="TableCellView" customModule="Feeding_Memo" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qjj-tS-tUH" id="m7O-I3-1c2">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="70.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Drom 11:30 to 13:33  (60 min) on left side" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsFontForContentSizeCategory="YES" id="LHN-oM-Ie4">
-                                            <rect key="frame" x="16" y="0.0" width="288" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13:45" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uig-lb-imX" userLabel="MainHour">
+                                            <rect key="frame" x="16" y="8" width="71" height="32"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13:45" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mPV-ft-sA8" userLabel="NextHour">
+                                            <rect key="frame" x="233" y="8" width="71" height="32"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Next " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p0J-NE-gVS" userLabel="NextLabel">
+                                            <rect key="frame" x="163" y="21" width="62" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="62" id="FUR-32-uKS"/>
+                                                <constraint firstAttribute="height" constant="16" id="wb2-qA-dC6"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZEi-om-083">
+                                            <rect key="frame" x="16" y="44" width="288" height="17.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30 min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTq-Oz-gVE">
+                                                    <rect key="frame" x="123" y="3" width="42" height="11.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="42" id="q87-QY-BBM"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" red="0.63529411759999999" green="0.89019607840000003" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstItem="MTq-Oz-gVE" firstAttribute="top" secondItem="ZEi-om-083" secondAttribute="top" constant="3" id="0Gm-dq-Ad3"/>
+                                                <constraint firstAttribute="trailing" secondItem="MTq-Oz-gVE" secondAttribute="trailing" priority="999" constant="123" id="0W9-IV-6B9"/>
+                                                <constraint firstAttribute="bottom" secondItem="MTq-Oz-gVE" secondAttribute="bottom" constant="3" id="Crh-dS-UME"/>
+                                                <constraint firstItem="MTq-Oz-gVE" firstAttribute="leading" secondItem="ZEi-om-083" secondAttribute="leading" priority="999" constant="123" id="fyL-JS-jtj"/>
+                                            </constraints>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="End time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IWP-hS-lyw" userLabel="NextLabel">
+                                            <rect key="frame" x="93" y="21" width="62" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="16" id="ePL-ow-GQJ"/>
+                                                <constraint firstAttribute="width" constant="62" id="je5-K7-S0w"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="ZEi-om-083" firstAttribute="top" secondItem="Uig-lb-imX" secondAttribute="bottom" constant="4" id="5e3-Pm-yUJ"/>
+                                        <constraint firstItem="ZEi-om-083" firstAttribute="top" secondItem="mPV-ft-sA8" secondAttribute="bottom" constant="4" id="Fwh-GB-9fj"/>
+                                        <constraint firstAttribute="trailing" secondItem="mPV-ft-sA8" secondAttribute="trailing" constant="16" id="HU3-ZG-zmF"/>
+                                        <constraint firstAttribute="trailing" secondItem="ZEi-om-083" secondAttribute="trailing" constant="16" id="NXZ-mY-cfX"/>
+                                        <constraint firstItem="mPV-ft-sA8" firstAttribute="leading" secondItem="p0J-NE-gVS" secondAttribute="trailing" constant="8" id="QFr-Pz-ANr"/>
+                                        <constraint firstItem="p0J-NE-gVS" firstAttribute="top" secondItem="m7O-I3-1c2" secondAttribute="topMargin" constant="10" id="Re8-1g-XSa"/>
+                                        <constraint firstItem="IWP-hS-lyw" firstAttribute="leading" secondItem="Uig-lb-imX" secondAttribute="trailing" constant="6" id="Uvk-8E-JrS"/>
+                                        <constraint firstAttribute="bottom" secondItem="ZEi-om-083" secondAttribute="bottom" constant="9" id="Yvx-HW-bWa"/>
+                                        <constraint firstItem="Uig-lb-imX" firstAttribute="top" secondItem="m7O-I3-1c2" secondAttribute="top" constant="8" id="Yxc-Us-4hR"/>
+                                        <constraint firstItem="mPV-ft-sA8" firstAttribute="top" secondItem="m7O-I3-1c2" secondAttribute="top" constant="8" id="au0-qu-9jK"/>
+                                        <constraint firstItem="Uig-lb-imX" firstAttribute="leading" secondItem="m7O-I3-1c2" secondAttribute="leading" constant="16" id="grT-OB-c1I"/>
+                                        <constraint firstItem="ZEi-om-083" firstAttribute="leading" secondItem="m7O-I3-1c2" secondAttribute="leading" constant="16" id="hVE-Au-ocP"/>
+                                        <constraint firstItem="IWP-hS-lyw" firstAttribute="top" secondItem="m7O-I3-1c2" secondAttribute="top" constant="21" id="it9-oN-5Ql"/>
+                                        <constraint firstItem="p0J-NE-gVS" firstAttribute="baseline" secondItem="mPV-ft-sA8" secondAttribute="baseline" id="pXu-gp-QsI"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="MainHour" destination="Uig-lb-imX" id="PkR-H4-WNJ"/>
+                                    <outlet property="NextHour" destination="mPV-ft-sA8" id="yl6-Ur-Hyw"/>
+                                    <outlet property="ProgressLabel" destination="MTq-Oz-gVE" id="3Ab-0V-JSJ"/>
+                                    <outlet property="ProgressView" destination="ZEi-om-083" id="joY-2C-n42"/>
+                                    <outlet property="trailingProgressConstraint" destination="NXZ-mY-cfX" id="H0F-6z-EFj"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
+                        <sections/>
                         <connections>
                             <outlet property="dataSource" destination="ZYK-r8-M7u" id="WaB-m5-dfu"/>
                             <outlet property="delegate" destination="ZYK-r8-M7u" id="lHy-oB-bW1"/>
@@ -59,7 +114,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OFf-5T-Tce" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-927" y="2"/>
+            <point key="canvasLocation" x="-193.125" y="-105.63380281690141"/>
         </scene>
     </scenes>
 </document>

@@ -37,7 +37,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     var hint: UILabel = UILabel()
     
     
-    let cellReuseIdentifier = "cell"
+    let cellReuseIdentifier = "cellId"
     
     override func viewDidLoad()
     {
@@ -51,8 +51,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     func initComponents(){
         tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.dataSource = self 
         
         
         // circle button
@@ -69,9 +68,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         button.endAngle = 50
         button.layer.cornerRadius = button.frame.size.width / 2.0
         
-        view.addSubview(button)
-        
-        
+        view.addSubview(button) 
         //slider
         
         slider = Slider()
@@ -114,22 +111,24 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         button.backgroundColor = .orange
         
+      
+        showHint(withText: "Select Side")
+        
+    }
+    
+    func showHint(withText text : String){
         
         hint.removeFromSuperview()
         hint = UILabel()
-        hint.text = "Select Side"
+        hint.text = text
         let w = hint.intrinsicContentSize.width
         
         hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 50), width: view.frame.width, height: 50)
         
         view.addSubview(hint)
-        
-        
     }
     
     func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
-        
-         hint.removeFromSuperview()
         
         configureAddingFeedingSession(side:  atIndex == 0 ? .Left : .Right)
        
@@ -139,14 +138,8 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     private func showTimeButton(){
         slider.isHidden = false
         
-        hint.removeFromSuperview()
-        hint = UILabel()
-        hint.text = "Duration"
-        let w = hint.intrinsicContentSize.width
-      
-        hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 50), width: view.frame.width, height: 50)
-        
-        view.addSubview(hint)
+     
+        showHint(withText: "Duration")
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -156,10 +149,10 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     internal override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell:UITableViewCell = (tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell?)!
+        let cell : TableCellView = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! TableCellView
+        let data = feedData[indexPath.row]
         
-        cell.textLabel?.text = feedData[indexPath.row].toTextRepresentation()
-        
+        cell.set(feedingSession: data) 
         return cell
     }
     

@@ -33,8 +33,14 @@ public struct FeedingSession {
         
         self.EndTime = endTime
         self.StartTime = endTime.addingTimeInterval(TimeInterval.init(-60 * duration))
-        self.Duration = duration
         self.Side = side
+        
+        if(duration == 0)
+        {
+            self.Duration = 1
+        }else{ 
+            self.Duration = duration
+        }
    }
     
     public static func Create(side : Side, duration: Int, endTime : Date) -> FeedingSession{

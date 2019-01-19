@@ -13,7 +13,8 @@ public class FeedingSessionService {
     init() {
         feedingSessions = [
             FeedingSession.Create(side: .Left, duration: 60, endTime: Date()),
-            FeedingSession.Create(side: .Left, duration: 60, endTime: Date())
+            FeedingSession.Create(side: .Left, duration: 45, endTime: Date().addingTimeInterval(TimeInterval(60*60*2))),
+             FeedingSession.Create(side: .Left, duration: 45, endTime: Date().addingTimeInterval(TimeInterval(60*60*5)))
         ]
     }
     

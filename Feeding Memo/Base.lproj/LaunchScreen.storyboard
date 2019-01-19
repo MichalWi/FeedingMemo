@@ -18,27 +18,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feeding Memo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lec-j7-8E3">
-                                <rect key="frame" x="76" y="114" width="223" height="93"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rybkaje" translatesAutoresizingMaskIntoConstraints="NO" id="9Mw-dF-9Wn">
-                                <rect key="frame" x="76" y="215" width="223" height="237"/>
+                                <rect key="frame" x="50" y="207.5" width="275" height="252"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="9Mw-dF-9Wn" secondAttribute="height" multiplier="531:487" id="bg4-rX-StO"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lec-j7-8E3" secondAttribute="trailing" constant="76" id="E5J-1J-PUx"/>
-                            <constraint firstItem="lec-j7-8E3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="76" id="Ey3-El-jjM"/>
-                            <constraint firstItem="9Mw-dF-9Wn" firstAttribute="top" secondItem="lec-j7-8E3" secondAttribute="bottom" constant="8" symbolic="YES" id="Ocz-gU-7Ll"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lec-j7-8E3" secondAttribute="bottom" constant="460" id="geU-p6-wUi"/>
-                            <constraint firstItem="lec-j7-8E3" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ooF-PC-mPv"/>
+                            <constraint firstAttribute="trailing" secondItem="9Mw-dF-9Wn" secondAttribute="trailing" constant="50" id="KcK-Ga-egz"/>
                             <constraint firstItem="9Mw-dF-9Wn" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qfD-uS-4fC"/>
-                            <constraint firstItem="lec-j7-8E3" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="94" id="rFz-vk-bRj"/>
+                            <constraint firstItem="9Mw-dF-9Wn" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="50" id="xlJ-Xv-fTg"/>
                             <constraint firstItem="9Mw-dF-9Wn" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="xow-vq-wdR"/>
-                            <constraint firstItem="9Mw-dF-9Wn" firstAttribute="leading" secondItem="lec-j7-8E3" secondAttribute="leading" id="xt7-0H-9wh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
