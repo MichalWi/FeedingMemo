@@ -16,6 +16,8 @@ private struct const {
 
 public class TableCellView: UITableViewCell {
     
+    @IBOutlet weak var LeftArrow: UIImageView!
+    @IBOutlet weak var RightArrow: UIImageView!
     @IBOutlet weak var MainHour: UILabel!
     @IBOutlet weak var NextHour: UILabel!
     @IBOutlet weak var ProgressBar: UIProgressView!
@@ -40,6 +42,9 @@ public class TableCellView: UITableViewCell {
         ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
         
         ProgressLabel.text = "Duration: \(feedingSession.Duration) min"
+        
+        RightArrow.alpha = feedingSession.Side == .Left ? 0.3 : 1
+        LeftArrow.alpha = feedingSession.Side == .Right  ? 0.3 : 1
         
     }
     
