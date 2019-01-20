@@ -39,7 +39,7 @@ public class TableCellView: UITableViewCell {
         
         ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
         
-        ProgressLabel.text = "\(feedingSession.Duration) min"
+        ProgressLabel.text = "Duration: \(feedingSession.Duration) min"
         
     }
     
