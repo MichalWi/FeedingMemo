@@ -8,6 +8,8 @@ target 'Feeding Memo' do
   # Pods for Feeding Memo
   pod 'CircleMenu'
   pod 'fluid-slider'
+
+  pod 'Disk', '~> 0.4.0'
   
   swift_4_1_pod_targets = ['CircleMenu', 'fluid-slider']
   

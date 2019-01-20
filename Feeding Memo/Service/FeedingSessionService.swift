@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Disk
 
 public class FeedingSessionService {
     
@@ -14,11 +15,13 @@ public class FeedingSessionService {
     
     
     init() {
-        feedingSessions = [
-      
-        ]
+        let data = try? Disk.retrieve("feedingSessions.json", from: Disk.Directory.documents, as: [FeedingSession].self)
+        
+        if data != nil {
+            feedingSessions = data!
+        }
     }
-     
+    
     public func GetFeedingSessions() -> [FeedingSession] {
        
         return feedingSessions.sorted() {
@@ -28,11 +31,15 @@ public class FeedingSessionService {
     
     public func AddFeedingSession(_ sessionToAdd : FeedingSession) {
         feedingSessions.append(sessionToAdd)
+        
+        try? Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")
     }
     
     public func RemoveFeedingSession(_ withId : FeedingSessionId){
         
         feedingSessions.removeAll(where: { $0.Id == withId })
+        
+        try? Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")
     }
     
 }

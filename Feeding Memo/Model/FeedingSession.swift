@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Side : String {
+public enum Side : String, Codable{
     case Left
     case Right
     case DontRemember
@@ -16,7 +16,7 @@ public enum Side : String {
 
 
 
-public struct FeedingSession {
+public struct FeedingSession: Codable {
     
     
     let Id : FeedingSessionId
@@ -53,7 +53,7 @@ public struct FeedingSession {
     }
 }
 
-public struct FeedingSessionId {
+public struct FeedingSessionId : Codable{
     private let Id : Date
     
     init(Id : Date) {
