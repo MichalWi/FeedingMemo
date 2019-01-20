@@ -57,12 +57,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         // circle button
         let button = CircleMenu(
             frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize),
-            normalIcon:"plus_filled",
-            selectedIcon:"baby",
+            normalIcon:"plus",
+            selectedIcon:"plus_filled",
             buttonsCount: 2,
             duration: 0.2,
-            distance: 110)
-        button.subButtonsRadius = 30
+            distance: 100)
+        button.subButtonsRadius = 25
         button.delegate = self
         button.startAngle = -50
         button.endAngle = 50
@@ -75,7 +75,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         slider.frame = CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
         slider.attributedTextForFraction = { fraction in
             let string = "\(Int((fraction) * CGFloat(consts.maxFeedingTime))) min"
-            return NSAttributedString(string: string, attributes: [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.black])
+            return NSAttributedString(string: string, attributes: [.font: UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.black), .foregroundColor: UIColor.black])
             
         }
         let labelTextAttributes: [NSAttributedString.Key : Any] = [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.white]
@@ -84,7 +84,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         slider.shadowOffset = CGSize(width: 0, height: 10)
         slider.shadowBlur = 5
         slider.shadowColor = UIColor(white: 0, alpha: 0.1)
-        slider.contentViewColor = .orange
+        slider.contentViewColor = .gray
         slider.valueViewColor = .white
         slider.setMinimumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
         slider.setMaximumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
@@ -109,7 +109,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             button.setImage(#imageLiteral(resourceName: "right_footprint"), for: .normal)
         }
         
-        button.backgroundColor = .orange
+        button.backgroundColor = .gray
         
       
         showHint(withText: "Select Side")
@@ -120,10 +120,11 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         hint.removeFromSuperview()
         hint = UILabel()
-        hint.text = text
+        hint.attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium), .foregroundColor: UIColor.black])
+        
         let w = hint.intrinsicContentSize.width
         
-        hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 50), width: view.frame.width, height: 50)
+        hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 40), width: view.frame.width, height: 50)
         
         view.addSubview(hint)
     }

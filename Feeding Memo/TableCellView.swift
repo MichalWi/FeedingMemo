@@ -15,17 +15,15 @@ private struct const {
 }
 
 public class TableCellView: UITableViewCell {
-   
-    @IBOutlet weak var trailingProgressConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var MainHour: UILabel!
     @IBOutlet weak var NextHour: UILabel!
-    @IBOutlet weak var ProgressView: UIView!
+    @IBOutlet weak var ProgressBar: UIProgressView!
     @IBOutlet weak var ProgressLabel: UILabel!
     
     override public func prepareForReuse() {
         MainHour.text = ""
         NextHour.text = ""
-        ProgressView.backgroundColor = .white
         ProgressLabel.text = ""
     }
     
@@ -34,29 +32,20 @@ public class TableCellView: UITableViewCell {
         NextHour.text = HourFormatter.formatDate(feedingSession.EndTime.addingTimeInterval(TimeInterval(exactly: 60 * 60 * const.feedInterval) ?? 0 ))
         
         if(feedingSession.Duration > 10) {
-            ProgressView.backgroundColor = .green
+            ProgressBar.tintColor = .green
         }else{
-            ProgressView.backgroundColor = .red
+            ProgressBar.tintColor = .red
         }
-         
+        
+        ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
+        
         ProgressLabel.text = "\(feedingSession.Duration) min"
         
-        adujstBar(duration: feedingSession.Duration)
     }
     
-    private func adujstBar(duration : Int){
+    private func getProgressFloat(duration : Int) -> Float{
+         
+        return (Float(duration) / Float(const.prefferedFeedTime))
         
-        
-        let maxSubtractValue = CGFloat(ProgressView.frame.width)
-        
-        let ratio = (CGFloat(duration) / CGFloat(const.prefferedFeedTime))
-      
-        
-        let valToSubtract =  maxSubtractValue - (maxSubtractValue * ratio)
-        
-        
-        trailingProgressConstraint.constant = (valToSubtract) + 16;
-        
-         self.updateConstraints()
     }
 }
