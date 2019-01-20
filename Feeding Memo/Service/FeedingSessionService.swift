@@ -12,9 +12,9 @@ public class FeedingSessionService {
     
     init() {
         feedingSessions = [
-            FeedingSession.Create(side: .Left, duration: 60, endTime: Date()),
-            FeedingSession.Create(side: .Left, duration: 45, endTime: Date().addingTimeInterval(TimeInterval(60*60*2))),
-             FeedingSession.Create(side: .Left, duration: 45, endTime: Date().addingTimeInterval(TimeInterval(60*60*5)))
+            FeedingSession.Create(side: .Left, duration: 45, endTime: Date().addingTimeInterval(-TimeInterval(60*60*3))) ,
+            FeedingSession.Create(side: .Right, duration: 45, endTime: Date().addingTimeInterval(-TimeInterval(60*60*2))) ,
+        
         ]
     }
     
@@ -22,7 +22,9 @@ public class FeedingSessionService {
     
     public func GetFeedingSessions() -> [FeedingSession] {
        
-        return feedingSessions
+        return feedingSessions.sorted() {
+            $1.StartTime < $0.StartTime
+        }
     }
     
     public func AddFeedingSession(_ sessionToAdd : FeedingSession) {

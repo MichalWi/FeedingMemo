@@ -19,13 +19,16 @@ struct consts {
 }
 
 struct tableViewConsts {
-    static let bottomMargin : CGFloat = 150
+    static let bottomMargin : CGFloat = 85
     
     static let buttonSize : CGFloat = 50
 }
 
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
+    
+    @IBOutlet weak var HeaderLabel: UILabel!
+    
     let Service = FeedingSessionService()
     
     
@@ -33,8 +36,10 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     
     //UI
-    var slider: Slider = Slider()
-    var hint: UILabel = UILabel()
+    var slider: Slider!
+    var maskView: UIView!
+    var hint: UILabel?
+    var circleButton : CircleMenu!
     
     
     let cellReuseIdentifier = "cellId"
@@ -48,31 +53,42 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         initComponents()
         
     }
-    
+   
     func initComponents(){
         tableView.delegate = self
         tableView.dataSource = self 
         
+        //drawer
+        maskView = UIView(
+            frame: CGRect(x: 0, y: view.frame.height - 160, width: view.frame.width , height: 140))
+        
+        maskView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+        maskView.isUserInteractionEnabled = false
+        maskView.alpha = 0
+        view.addSubview(maskView)
         
         // circle button
-        let button = CircleMenu(
+        circleButton = CircleMenu(
             frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize),
             normalIcon:"plus",
             selectedIcon:"plus_filled",
             buttonsCount: 2,
             duration: 0.2,
             distance: 100)
-        button.subButtonsRadius = 25
-        button.delegate = self
-        button.startAngle = -50
-        button.endAngle = 50
-        button.layer.cornerRadius = button.frame.size.width / 2.0
         
-        view.addSubview(button) 
+        circleButton.subButtonsRadius = 25
+        circleButton.delegate = self
+        circleButton.startAngle = -50
+        circleButton.endAngle = 50
+        circleButton.layer.cornerRadius = circleButton.frame.size.width / 2.0
+        
+        
+        view.addSubview(circleButton)
+        
+        
         //slider
-        
         slider = Slider()
-        slider.frame = CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
+        slider.frame = CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
         slider.attributedTextForFraction = { fraction in
             let string = "\(Int((fraction) * CGFloat(consts.maxFeedingTime))) min"
             return NSAttributedString(string: string, attributes: [.font: UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.black), .foregroundColor: UIColor.black])
@@ -80,7 +96,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         }
         let labelTextAttributes: [NSAttributedString.Key : Any] = [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.white]
        
-        slider.fraction = 0.5
+        slider.fraction = 1
         slider.shadowOffset = CGSize(width: 0, height: 10)
         slider.shadowBlur = 5
         slider.shadowColor = UIColor(white: 0, alpha: 0.1)
@@ -89,7 +105,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         slider.setMinimumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
         slider.setMaximumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
         
-        slider.imagesColor = UIColor.white.withAlphaComponent(0.8)
+        slider.imagesColor = UIColor.white
         slider.valueViewColor = .white
         slider.setMinimumImage(#imageLiteral(resourceName: "past"))
         slider.setMaximumImage(#imageLiteral(resourceName: "future"))
@@ -98,7 +114,6 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
      
         slider.isHidden = true;
     }
-    
     
     
      func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int) {
@@ -113,34 +128,46 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
       
         showHint(withText: "Select Side")
+        maskView.fadeIn()
         
     }
+    func circleMenu(_ circleMenu: CircleMenu, buttonWillSelected button: UIButton, atIndex: Int) {
+//        tableView.isScrollEnabled = false
+    }
+     
     
     func showHint(withText text : String){
         
-        hint.removeFromSuperview()
+        if(hint != nil){
+            hint!.removeFromSuperview()
+        }
+        
         hint = UILabel()
-        hint.attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium), .foregroundColor: UIColor.black])
         
-        let w = hint.intrinsicContentSize.width
+        hint!.removeFromSuperview()
         
-        hint.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 40), width: view.frame.width, height: 50)
+        hint!.attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium), .foregroundColor: UIColor.black])
         
-        view.addSubview(hint)
+        let w = hint!.intrinsicContentSize.width
+        
+        hint!.frame = CGRect(x: ((self.view.frame.width / 2) - (w / 2)), y: (self.view.frame.height - tableViewConsts.bottomMargin + 40) + tableView.contentOffset.y, width: view.frame.width, height: 50)
+        
+        view.addSubview(hint!)
     }
-    
+   
     func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
+        
+        showTimeButton()
         
         configureAddingFeedingSession(side:  atIndex == 0 ? .Left : .Right)
        
-        showTimeButton()
     }
+    
     
     private func showTimeButton(){
         slider.isHidden = false
-        
-     
-        showHint(withText: "Duration")
+        circleButton.isHidden = true
+        showHint(withText: "Set Duration")
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -157,9 +184,10 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         return cell
     }
     
+    
    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        return slider?.isHidden ?? true
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -173,19 +201,49 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         }
     }
     
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+  
+        let dy = scrollView.contentOffset.y
+
+        circleButton.frame =
+         CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
+
+        maskView.frame =
+           CGRect(x: 0, y: view.frame.height - 160 + dy + 20, width: view.frame.width , height: 140)
+        
+         slider.frame =
+            CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50 + dy + 20, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
+        
+        if (!scrollView.isDecelerating){
+            maskView.fadeOut()
+            circleButton.hideButtons(0.2)
+            circleButton.isHidden = false
+            slider.isHidden = true
+            hint?.isHidden = true
+        }
+        
+    }
+    
     
     private func configureAddingFeedingSession(side : Side){
         slider.didEndTracking = { (slider) -> () in
             slider.isHidden = true;
-            
+
+            self.maskView.fadeOut()
+            self.circleButton.isHidden = false;
+
+            self.circleButton.isUserInteractionEnabled = true
+
             let newFeedingSession = FeedingSession.Create(side: side, duration: Int(slider.fraction * CGFloat(consts.maxFeedingTime)), endTime: Date())
-            
+
             self.Service.AddFeedingSession(newFeedingSession)
-            
+            self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
+
             self.reloadData()
-            
-            self.hint.removeFromSuperview()
-            
+            if self.hint != nil {
+                self.hint!.removeFromSuperview()
+            }
+
         }
     }
     
@@ -203,5 +261,24 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
       
     }
 }
-
-
+public extension UIView {
+    
+    /// Fade in a view with a duration
+    ///
+    /// Parameter duration: custom animation duration
+    func fadeIn(withDuration duration: TimeInterval = 0.2) {
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 1.0
+        })
+    }
+    
+    /// Fade out a view with a duration
+    ///
+    /// - Parameter duration: custom animation duration
+    func fadeOut(withDuration duration: TimeInterval = 0.2) {
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 0.0
+        })
+    }
+    
+}
