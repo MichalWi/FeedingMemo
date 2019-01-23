@@ -40,9 +40,13 @@ public class FeedingSessionService {
     
     public func RemoveFeedingSession(_ withId : FeedingSessionId){
         
-        feedingSessions.removeAll(where: { $0.Id == withId })
+        let toDeleteIdx = feedingSessions.index { (f) -> Bool in
+            f.Id == withId
+        }
         
-        try? Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")
+        feedingSessions.remove(at: toDeleteIdx!)
+        
+        try! Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")
     }
     
 }

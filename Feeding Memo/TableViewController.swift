@@ -197,13 +197,16 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
        
-            self.tableView.beginUpdates()
+
             let id = self.feedData[indexPath.row].Id
-            self.Service.RemoveFeedingSession(id) 
+            self.Service.RemoveFeedingSession(id)
             self.feedData = self.Service.GetFeedingSessions()
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-           
-            self.tableView.endUpdates()
+            
+           // self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                self.tableView.reloadData()
+                
+            })
         }
     }
     
