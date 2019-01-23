@@ -25,11 +25,14 @@ public class FeedingSessionService {
     public func GetFeedingSessions() -> [FeedingSession] {
        
         return feedingSessions.sorted() {
-            $1.StartTime < $0.StartTime
+            $1.EndTime < $0.EndTime
         }
     }
     
     public func AddFeedingSession(_ sessionToAdd : FeedingSession) {
+        
+       
+        
         feedingSessions.append(sessionToAdd)
         
         try? Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")

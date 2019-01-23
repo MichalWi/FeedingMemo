@@ -48,7 +48,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     {
         super.viewDidLoad()
         
-        reloadData()
+        self.feedData = self.Service.GetFeedingSessions()
         
         initComponents()
         
@@ -179,8 +179,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     {
         let cell : TableCellView = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! TableCellView
         let data = feedData[indexPath.row]
+        let prevData = indexPath.row == feedData.count - 1 ? nil : feedData[indexPath.row + 1]
         
-        cell.set(feedingSession: data) 
+        
+        let timeSinceLast = self.calculateMinutesSinceFeeding(startTime: prevData?.EndTime ?? Date(), endTime: data.EndTime)
+        
+        cell.set(feedingSession: data, timeSinceLast: timeSinceLast)
         return cell
     }
     
@@ -193,11 +197,13 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
        
+            self.tableView.beginUpdates()
             let id = self.feedData[indexPath.row].Id
-            self.Service.RemoveFeedingSession(id)
-            
-            reloadData()
-            
+            self.Service.RemoveFeedingSession(id) 
+            self.feedData = self.Service.GetFeedingSessions()
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+           
+            self.tableView.endUpdates()
         }
     }
     
@@ -233,13 +239,18 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             self.circleButton.isHidden = false;
 
             self.circleButton.isUserInteractionEnabled = true
-
+            
             let newFeedingSession = FeedingSession.Create(side: side, duration: Int(slider.fraction * CGFloat(consts.maxFeedingTime)), endTime: Date())
 
             self.Service.AddFeedingSession(newFeedingSession)
+            self.feedData = self.Service.GetFeedingSessions()
+            
+            // insert row in table
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .automatic)
+            
             self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
-
-            self.reloadData()
+ 
             if self.hint != nil {
                 self.hint!.removeFromSuperview()
             }
@@ -247,6 +258,20 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         }
     }
     
+    private func calculateMinutesSinceFeeding(startTime: Date, endTime : Date) -> Int{
+        
+        
+        var inputComps = Calendar.current.dateComponents([.hour, .minute], from: startTime)
+        let nowComps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: endTime )
+        
+        inputComps.year = nowComps.year
+        inputComps.month = nowComps.month
+        inputComps.day = nowComps.day
+        
+        guard let normalisedInputDate = Calendar.current.date(from: inputComps) else { return 0}
+        
+        return Int(endTime.timeIntervalSince(normalisedInputDate) / 60)
+    }
     
     private func persistDataSource(){
         
@@ -254,12 +279,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         defaults.set(self.feedData, forKey: defaultsKeys.dataKey);
     }
     
-    private func reloadData(){
-        
-        feedData = Service.GetFeedingSessions()
-        self.tableView.reloadData()
-      
-    }
+    
 }
 public extension UIView {
     

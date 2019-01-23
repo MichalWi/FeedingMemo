@@ -23,13 +23,14 @@ public class TableCellView: UITableViewCell {
     @IBOutlet weak var ProgressBar: UIProgressView!
     @IBOutlet weak var ProgressLabel: UILabel!
     
+    @IBOutlet weak var DurationLabel: UILabel!
     override public func prepareForReuse() {
         MainHour.text = ""
         NextHour.text = ""
         ProgressLabel.text = ""
     }
     
-    public func set(feedingSession : FeedingSession){
+    public func set(feedingSession : FeedingSession, timeSinceLast : Int){
         MainHour.text = HourFormatter.formatDate(feedingSession.EndTime)
         NextHour.text = HourFormatter.formatDate(feedingSession.EndTime.addingTimeInterval(TimeInterval(exactly: 60 * 60 * const.feedInterval) ?? 0 ))
         
@@ -38,6 +39,8 @@ public class TableCellView: UITableViewCell {
         }else{
             ProgressBar.tintColor = .red
         }
+        
+        DurationLabel.text = "\(timeSinceLast) minutes between"
         
         ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
         

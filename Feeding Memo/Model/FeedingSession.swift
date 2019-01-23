@@ -28,6 +28,7 @@ public struct FeedingSession: Codable {
     
     
     
+    
     init(Id : FeedingSessionId, side : Side, duration: Int, endTime : Date){
         self.Id = Id
         
@@ -41,6 +42,7 @@ public struct FeedingSession: Codable {
         }else{ 
             self.Duration = duration
         }
+        
    }
     
     public static func Create(side : Side, duration: Int, endTime : Date) -> FeedingSession{
