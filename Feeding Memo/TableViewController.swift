@@ -23,7 +23,18 @@ struct tableViewConsts {
     
     static let buttonSize : CGFloat = 50
 }
-
+struct MonthSection : Comparable {
+    static func < (lhs: MonthSection, rhs: MonthSection) -> Bool {
+        return lhs.day > rhs.day
+    }
+    
+    static func == (lhs: MonthSection, rhs: MonthSection) -> Bool {
+       return lhs.day == rhs.day
+    }
+    var day : Date
+    var feeding : [FeedingSession]
+    
+}
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
     
@@ -33,6 +44,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     
     var feedData : [FeedingSession] = []
+    var sections : [MonthSection] = []
     
     
     //UI
@@ -43,17 +55,51 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     
     let cellReuseIdentifier = "cellId"
+    let placeholderCellReuseIdentifier = "placeholderCellId"
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        self.feedData = self.Service.GetFeedingSessions()
+        reloadDataSource()
         
         initComponents()
         
     }
+    
+    fileprivate func reloadDataSource(){
+        self.feedData = self.Service.GetFeedingSessions()
+        
+        let groups = Dictionary(grouping: self.feedData) { (feedingSession:FeedingSession) in
+            return firstDayOfMonth(date: feedingSession.EndTime)
+        }
+        
+        self.sections = groups.map { (arg) -> MonthSection in
+            let (key, values) = arg
+            return MonthSection(day: key, feeding: values)
+            }.sorted()
+                
+        
+        
+    }
+    
+    fileprivate func firstDayOfMonth(date : Date) -> Date {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        return calendar.date(from: components)!
+    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return self.sections.count
+    }
    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        let section =  self.sections[section]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "DD MMMM yyyy"
+        return dateFormatter.string(from: section.day)
+    }
+    
     func initComponents(){
         tableView.delegate = self
         tableView.dataSource = self 
@@ -172,20 +218,28 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return feedData.count
+        let section = self.sections[section]
+        return section.feeding.count
     }
-    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
+    }
     internal override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
+        let section = self.sections[indexPath.section]
+        let data = section.feeding[indexPath.row]
+        
         let cell : TableCellView = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! TableCellView
-        let data = feedData[indexPath.row]
+    
         let prevData = indexPath.row == feedData.count - 1 ? nil : feedData[indexPath.row + 1]
         
         
         let timeSinceLast = self.calculateMinutesSinceFeeding(startTime: prevData?.EndTime ?? Date(), endTime: data.EndTime)
         
         cell.set(feedingSession: data, timeSinceLast: timeSinceLast)
+        
         return cell
+       
     }
     
     
@@ -200,7 +254,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
 
             let id = self.feedData[indexPath.row].Id
             self.Service.RemoveFeedingSession(id)
-            self.feedData = self.Service.GetFeedingSessions()
+            reloadDataSource()
             
            // self.tableView.deleteRows(at: [indexPath], with: .automatic)
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
@@ -246,12 +300,21 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             let newFeedingSession = FeedingSession.Create(side: side, duration: Int(slider.fraction * CGFloat(consts.maxFeedingTime)), endTime: Date())
 
             self.Service.AddFeedingSession(newFeedingSession)
-            self.feedData = self.Service.GetFeedingSessions()
-            
-            // insert row in table
+            self.reloadDataSource()
+           
+            self.tableView.beginUpdates()
+            let newSection = Date().dateAtBeginningOfDay() != self.feedData[1].EndTime.dateAtBeginningOfDay()
+            if(newSection) {
+                
+                self.tableView.insertSections([0] , with: .automatic)
+            }
+          
             let indexPath = IndexPath(row: 0, section: 0)
             self.tableView.insertRows(at: [indexPath], with: .automatic)
-            
+            // insert row in table
+           
+            self.tableView.endUpdates()
+
             self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
  
             if self.hint != nil {
@@ -263,17 +326,29 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     private func calculateMinutesSinceFeeding(startTime: Date, endTime : Date) -> Int{
         
+        let components = Calendar.current.dateComponents([.minute], from: startTime, to: endTime)
+
         
-        var inputComps = Calendar.current.dateComponents([.hour, .minute], from: startTime)
-        let nowComps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: endTime )
         
-        inputComps.year = nowComps.year
-        inputComps.month = nowComps.month
-        inputComps.day = nowComps.day
+        return Int(components.minute ?? 0)
+    }
+    
+    
+    func groupByFullDays(feedingSessions : [FeedingSession]) -> [Date:[FeedingSession]] {
+
+        var d : [Date:[FeedingSession]] = [:]
         
-        guard let normalisedInputDate = Calendar.current.date(from: inputComps) else { return 0}
+        for fs in feedingSessions {
+            
+            if(d[fs.EndTime.dateAtBeginningOfDay()!] == nil){
+                d[fs.EndTime.dateAtBeginningOfDay()!] = []
+            }
+            
+            d[fs.EndTime.dateAtBeginningOfDay()!]?.append(fs)
+        }
         
-        return Int(endTime.timeIntervalSince(normalisedInputDate) / 60)
+        return d
+ 
     }
     
     private func persistDataSource(){
@@ -304,4 +379,24 @@ public extension UIView {
         })
     }
     
+}
+extension Date {
+    func dateAtBeginningOfDay() -> Date? {
+        var calendar = Calendar.current
+        // Or whatever you need
+        // if server returns date in UTC better to use UTC too
+        let timeZone = NSTimeZone.system
+        calendar.timeZone = timeZone
+        
+        // Selectively convert the date components (year, month, day) of the input date
+        var dateComps = calendar.dateComponents([.year, .month, .day], from: self)
+        // Set the time components manually
+        dateComps.hour = 0
+        dateComps.minute = 0
+        dateComps.second = 0
+        
+        // Convert back
+        let beginningOfDay = calendar.date(from: dateComps)
+        return beginningOfDay
+    }
 }
