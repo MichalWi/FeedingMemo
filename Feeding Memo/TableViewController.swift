@@ -9,36 +9,19 @@
 import UIKit
 import CircleMenu
 import fluid_slider
-
-struct defaultsKeys {
-    static let dataKey = "feedingDataKey"
-}
-
-struct consts {
-    static let maxFeedingTime = 90
-}
+import SwiftDate
 
 struct tableViewConsts {
     static let bottomMargin : CGFloat = 85
     
     static let buttonSize : CGFloat = 50
 }
-struct MonthSection : Comparable {
-    static func < (lhs: MonthSection, rhs: MonthSection) -> Bool {
-        return lhs.day > rhs.day
-    }
-    
-    static func == (lhs: MonthSection, rhs: MonthSection) -> Bool {
-       return lhs.day == rhs.day
-    }
-    var day : Date
-    var feeding : [FeedingSession]
-    
-}
+
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
     
     @IBOutlet weak var HeaderLabel: UILabel!
+    @IBOutlet weak var RemindSwitch: UISwitch!
     
     let Service = FeedingSessionService()
     
@@ -46,6 +29,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     var feedData : [FeedingSession] = []
     var sections : [MonthSection] = []
     
+    @IBOutlet weak var nextFeedingCountdownLabel: UILabel!
     
     //UI
     var slider: Slider!
@@ -64,7 +48,8 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         reloadDataSource()
         
         initComponents()
-        
+   
+       
     }
     
     fileprivate func reloadDataSource(){
@@ -102,7 +87,8 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     func initComponents(){
         tableView.delegate = self
-        tableView.dataSource = self 
+        tableView.dataSource = self
+         self.tableView.contentInset = UIEdgeInsets(top: 15,left: 0,bottom: 0,right: 0)
         
         //drawer
         maskView = MaskView(
@@ -146,9 +132,16 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
     }
     func circleMenu(_ circleMenu: CircleMenu, buttonWillSelected button: UIButton, atIndex: Int) {
-//        tableView.isScrollEnabled = false
+        
     }
-     
+    
+    func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
+        
+        showTimeButton()
+        
+        configureAddingFeedingSession(side:  atIndex == 0 ? .Left : .Right)
+        
+    }
     
     func showHint(withText text : String){
         
@@ -169,14 +162,6 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         view.addSubview(hint!)
     }
    
-    func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
-        
-        showTimeButton()
-        
-        configureAddingFeedingSession(side:  atIndex == 0 ? .Left : .Right)
-       
-    }
-    
     
     private func showTimeButton(){
         slider.isHidden = false
@@ -190,7 +175,13 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         return section.feeding.count
     }
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 10
+        
+        if(section == 0){
+            return 40
+        }else{
+            return 10
+        }
+        
     }
     internal override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
@@ -199,19 +190,30 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         let cell : TableCellView = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! TableCellView
     
-        let prevData = indexPath.row == feedData.count - 1 ? nil : feedData[indexPath.row + 1]
+        let allFeeds = feedData.sorted {
+            $0.EndTime < $1.EndTime
+        }
+        
+        let index = allFeeds.firstIndex {
+            $0.Id == data.Id
+        }
+       
+        var endTime = Date()
+        if(index != nil && index! > 0 && allFeeds.count != index ){
+           
+            let prev = allFeeds[index! - 1]
+            endTime = prev.EndTime
+        }
         
         
-        let timeSinceLast = self.calculateMinutesSinceFeeding(startTime: prevData?.EndTime ?? Date(), endTime: data.EndTime)
+        cell.set(feedingSession: data, prevFeeding: endTime)
         
-        cell.set(feedingSession: data, timeSinceLast: timeSinceLast)
         
         return cell
        
     }
     
     
-   
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return slider?.isHidden ?? true
     }
@@ -235,7 +237,9 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
   
         let dy = scrollView.contentOffset.y
-
+        if(titSelector == nil) {
+            return
+        }
         titSelector.frame =
          CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
 
@@ -295,76 +299,39 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     private func calculateMinutesSinceFeeding(startTime: Date, endTime : Date) -> Int{
         
         let components = Calendar.current.dateComponents([.minute], from: startTime, to: endTime)
-
-        
-        
+ 
         return Int(components.minute ?? 0)
     }
     
     
     func groupByFullDays(feedingSessions : [FeedingSession]) -> [Date:[FeedingSession]] {
 
-        var d : [Date:[FeedingSession]] = [:]
+        var grouped : [Date:[FeedingSession]] = [:]
         
         for fs in feedingSessions {
             
-            if(d[fs.EndTime.dateAtBeginningOfDay()!] == nil){
-                d[fs.EndTime.dateAtBeginningOfDay()!] = []
+            if(grouped[fs.EndTime.dateAtBeginningOfDay()!] == nil){
+                grouped[fs.EndTime.dateAtBeginningOfDay()!] = []
             }
             
-            d[fs.EndTime.dateAtBeginningOfDay()!]?.append(fs)
+            grouped[fs.EndTime.dateAtBeginningOfDay()!]?.append(fs)
         }
         
-        return d
+        return grouped
  
     }
     
-    private func persistDataSource(){
-        
-        let defaults = UserDefaults.standard
-        defaults.set(self.feedData, forKey: defaultsKeys.dataKey);
-    }
-    
-    
 }
-public extension UIView {
-    
-    /// Fade in a view with a duration
-    ///
-    /// Parameter duration: custom animation duration
-    func fadeIn(withDuration duration: TimeInterval = 0.2) {
-        UIView.animate(withDuration: duration, animations: {
-            self.alpha = 1.0
-        })
+
+struct MonthSection : Comparable {
+    static func < (lhs: MonthSection, rhs: MonthSection) -> Bool {
+        return lhs.day > rhs.day
     }
     
-    /// Fade out a view with a duration
-    ///
-    /// - Parameter duration: custom animation duration
-    func fadeOut(withDuration duration: TimeInterval = 0.2) {
-        UIView.animate(withDuration: duration, animations: {
-            self.alpha = 0.0
-        })
+    static func == (lhs: MonthSection, rhs: MonthSection) -> Bool {
+        return lhs.day == rhs.day
     }
+    var day : Date
+    var feeding : [FeedingSession]
     
-}
-extension Date {
-    func dateAtBeginningOfDay() -> Date? {
-        var calendar = Calendar.current
-        // Or whatever you need
-        // if server returns date in UTC better to use UTC too
-        let timeZone = NSTimeZone.system
-        calendar.timeZone = timeZone
-        
-        // Selectively convert the date components (year, month, day) of the input date
-        var dateComps = calendar.dateComponents([.year, .month, .day], from: self)
-        // Set the time components manually
-        dateComps.hour = 0
-        dateComps.minute = 0
-        dateComps.second = 0
-        
-        // Convert back
-        let beginningOfDay = calendar.date(from: dateComps)
-        return beginningOfDay
-    }
 }

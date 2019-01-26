@@ -11,6 +11,8 @@ target 'Feeding Memo' do
 
   pod 'Disk', '~> 0.4.0'
   
+  pod 'SwiftDate', '~> 5.1.0'
+  
   swift_4_1_pod_targets = ['CircleMenu', 'fluid-slider']
   
   post_install do | installer |

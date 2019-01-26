@@ -9,13 +9,17 @@
 import Foundation
 import Disk
 
+public struct defaultsKeys {
+    static let dataKey = "feedingSessions.json"
+}
+
 public class FeedingSessionService {
     
     private var feedingSessions : [FeedingSession] = []
     
     
     init() {
-        let data = try? Disk.retrieve("feedingSessions.json", from: Disk.Directory.documents, as: [FeedingSession].self)
+        let data = try? Disk.retrieve(defaultsKeys.dataKey, from: Disk.Directory.documents, as: [FeedingSession].self)
         
         if data != nil {
             feedingSessions = data!
@@ -35,7 +39,7 @@ public class FeedingSessionService {
         
         feedingSessions.append(sessionToAdd)
         
-        try? Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")
+        try? Disk.save(feedingSessions, to: .documents, as: defaultsKeys.dataKey)
     }
     
     public func RemoveFeedingSession(_ withId : FeedingSessionId){
@@ -46,7 +50,7 @@ public class FeedingSessionService {
         
         feedingSessions.remove(at: toDeleteIdx!)
         
-        try! Disk.save(feedingSessions, to: .documents, as: "feedingSessions.json")
+        try! Disk.save(feedingSessions, to: .documents, as: defaultsKeys.dataKey)
     }
     
 }

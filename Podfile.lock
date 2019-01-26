@@ -4,11 +4,13 @@ PODS:
   - fluid-slider (0.0.6):
     - pop
   - pop (1.0.10)
+  - SwiftDate (5.1.0)
 
 DEPENDENCIES:
   - CircleMenu
   - Disk (~> 0.4.0)
   - fluid-slider
+  - SwiftDate (~> 5.1.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -16,13 +18,15 @@ SPEC REPOS:
     - Disk
     - fluid-slider
     - pop
+    - SwiftDate
 
 SPEC CHECKSUMS:
   CircleMenu: 290ce681d09d0c023600e2588e89a111c0be3b2d
   Disk: b1af8bbf3a2fd4bc7b4672809858fbbd84f02931
   fluid-slider: 51151aa6e1bc834e34992163689e33db5cb2044f
   pop: 2e49064438d90f0429787015f57077a30e6a4f72
+  SwiftDate: fd3cf522aa5d961862171c684b78ea0e3ebbea0f
 
-PODFILE CHECKSUM: b91a2098194d89f9326d1e3ce60d87da673d6330
+PODFILE CHECKSUM: 46fd8139827b1f211349771e31117887f1ffb2d6
 
 COCOAPODS: 1.5.3

@@ -10,6 +10,10 @@
 		56B10B014528DDE216AAFABA /* Pods_Feeding_Memo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */; };
 		E721ABA921F926AE00F8472C /* TablePlaceholderCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */; };
 		E721ABAC21FC827100F8472C /* UITitSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAB21FC827100F8472C /* UITitSelector.swift */; };
+		E721ABAE21FC8E3C00F8472C /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAD21FC8E3C00F8472C /* MaskView.swift */; };
+		E721ABB021FC8E4800F8472C /* DurationSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAF21FC8E4800F8472C /* DurationSlider.swift */; };
+		E721ABB421FC8EE600F8472C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABB321FC8EE600F8472C /* DateExtensions.swift */; };
+		E721ABB621FC8F2E00F8472C /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABB521FC8F2E00F8472C /* Defaults.swift */; };
 		E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697621F32DF200771BAD /* AppDelegate.swift */; };
 		E76E697921F32DF200771BAD /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697821F32DF200771BAD /* TableViewController.swift */; };
 		E76E697C21F32DF200771BAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76E697A21F32DF200771BAD /* Main.storyboard */; };
@@ -27,6 +31,10 @@
 		A77B775CCF2AD5F46900338B /* Pods-Feeding Memo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.debug.xcconfig"; sourceTree = "<group>"; };
 		E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TablePlaceholderCellView.swift; sourceTree = "<group>"; };
 		E721ABAB21FC827100F8472C /* UITitSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITitSelector.swift; sourceTree = "<group>"; };
+		E721ABAD21FC8E3C00F8472C /* MaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskView.swift; sourceTree = "<group>"; };
+		E721ABAF21FC8E4800F8472C /* DurationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationSlider.swift; sourceTree = "<group>"; };
+		E721ABB321FC8EE600F8472C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		E721ABB521FC8F2E00F8472C /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		E76E697321F32DF100771BAD /* Feeding Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Feeding Memo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E76E697621F32DF200771BAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E76E697821F32DF200771BAD /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
@@ -73,8 +81,18 @@
 			isa = PBXGroup;
 			children = (
 				E721ABAB21FC827100F8472C /* UITitSelector.swift */,
+				E721ABAD21FC8E3C00F8472C /* MaskView.swift */,
+				E721ABAF21FC8E4800F8472C /* DurationSlider.swift */,
 			);
 			path = CustomUIComponents;
+			sourceTree = "<group>";
+		};
+		E721ABB121FC8ECE00F8472C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E721ABB321FC8EE600F8472C /* DateExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		E76E696A21F32DF100771BAD = {
@@ -98,6 +116,7 @@
 		E76E697521F32DF100771BAD /* Feeding Memo */ = {
 			isa = PBXGroup;
 			children = (
+				E721ABB121FC8ECE00F8472C /* Extensions */,
 				E721ABAA21FC824200F8472C /* CustomUIComponents */,
 				E76E699021F3B43B00771BAD /* Formatters */,
 				E76E698D21F3A2D400771BAD /* Service */,
@@ -110,6 +129,7 @@
 				E76E698221F32DF700771BAD /* Info.plist */,
 				E76E698821F33A5600771BAD /* TableCellView.swift */,
 				E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */,
+				E721ABB521FC8F2E00F8472C /* Defaults.swift */,
 			);
 			path = "Feeding Memo";
 			sourceTree = "<group>";
@@ -218,6 +238,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CircleMenu/CircleMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/Disk/Disk.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/fluid-slider/fluid_slider.framework",
 				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
 			);
@@ -227,6 +248,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CircleMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Disk.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/fluid_slider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
 			);
@@ -264,12 +286,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E721ABB021FC8E4800F8472C /* DurationSlider.swift in Sources */,
 				E76E699221F3B44F00771BAD /* HourFormatter.swift in Sources */,
 				E721ABA921F926AE00F8472C /* TablePlaceholderCellView.swift in Sources */,
+				E721ABAE21FC8E3C00F8472C /* MaskView.swift in Sources */,
 				E76E698921F33A5600771BAD /* TableCellView.swift in Sources */,
+				E721ABB421FC8EE600F8472C /* DateExtensions.swift in Sources */,
 				E76E698F21F3A3C700771BAD /* FeedingSessionService.swift in Sources */,
 				E76E698C21F3A2C200771BAD /* FeedingSession.swift in Sources */,
 				E76E697921F32DF200771BAD /* TableViewController.swift in Sources */,
+				E721ABB621FC8F2E00F8472C /* Defaults.swift in Sources */,
 				E721ABAC21FC827100F8472C /* UITitSelector.swift in Sources */,
 				E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */,
 			);

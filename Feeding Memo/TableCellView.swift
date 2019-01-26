@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftDate
 
 private struct const {
     public static let feedInterval = 3
@@ -22,6 +23,7 @@ public class TableCellView: UITableViewCell {
     @IBOutlet weak var NextHour: UILabel!
     @IBOutlet weak var ProgressBar: UIProgressView!
     @IBOutlet weak var ProgressLabel: UILabel!
+    @IBOutlet weak var NextLabel: UILabel!
     
     @IBOutlet weak var DurationLabel: UILabel!
     override public func prepareForReuse() {
@@ -30,7 +32,7 @@ public class TableCellView: UITableViewCell {
         ProgressLabel.text = ""
     }
     
-    public func set(feedingSession : FeedingSession, timeSinceLast : Int){
+    public func set(feedingSession : FeedingSession, prevFeeding : Date){
         MainHour.text = HourFormatter.formatDate(feedingSession.EndTime)
         NextHour.text = HourFormatter.formatDate(feedingSession.EndTime.addingTimeInterval(TimeInterval(exactly: 60 * 60 * const.feedInterval) ?? 0 ))
         
@@ -40,7 +42,18 @@ public class TableCellView: UITableViewCell {
             ProgressBar.tintColor = .red
         }
         
-        DurationLabel.text = "\(timeSinceLast) minutes between"
+        let a = DateInRegion(feedingSession.EndTime)
+        let b = DateInRegion(prevFeeding)
+    
+        let interval = (b - a).toString {
+            $0.maximumUnitCount = 4
+            $0.allowedUnits = [.day, .hour, .minute]
+            $0.collapsesLargestUnit = true
+            $0.unitsStyle = .short
+        }
+        DurationLabel.text = "\(interval) gap"
+        
+        NextLabel.text = a.toRelative()
         
         ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
         
