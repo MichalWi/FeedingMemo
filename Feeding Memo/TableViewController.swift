@@ -20,6 +20,24 @@ struct tableViewConsts {
 
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
+    private func createRemainingTimeText(interval : TimeInterval) -> String {
+        return interval.toString {
+            $0.maximumUnitCount = 4
+            $0.allowedUnits = [.day, .hour, .minute]
+            $0.collapsesLargestUnit = true
+            $0.unitsStyle = .short
+        }
+    }
+    
+    private func calculateNextFeedingInterval(date : Date?) -> TimeInterval {
+       let interval = ((date) ?? Date()).addingTimeInterval(3.hours.timeInterval).timeIntervalSinceNow
+        
+        if(interval < 0) {
+            return (Date()).addingTimeInterval(3.hours.timeInterval).timeIntervalSinceNow
+        }
+        
+        return interval;
+    }
     
     @IBAction func ReminderSwitchDidChange(_ sender: Any) {
         if RemindSwitch.isOn {
@@ -29,24 +47,14 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in })
             
             let content = UNMutableNotificationContent()
-            content.title = "Feeding timer!"
+            content.title = "Feeding Memo!"
             content.body = "Every 3 hours"
-            content.subtitle = "From Feeding Memos"
             content.categoryIdentifier = "message"
             
-            var interval = ((feedData.first?.EndTime) ?? Date()).addingTimeInterval(20.seconds.timeInterval).timeIntervalSinceNow
+            let interval = calculateNextFeedingInterval(date: feedData.first?.EndTime)
             
-            if(interval < 0 ) {
-               interval =  (Date()).addingTimeInterval(20.seconds.timeInterval).timeIntervalSinceNow
-                
-            }
             
-            let remainingTime = interval.toString {
-                $0.maximumUnitCount = 4
-                $0.allowedUnits = [.day, .hour, .minute]
-                $0.collapsesLargestUnit = true
-                $0.unitsStyle = .short
-            }
+            let remainingTime = createRemainingTimeText(interval: interval)
             
             nextFeedingCountdownLabel.text = "\(remainingTime)"
             
@@ -145,7 +153,9 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             
             DispatchQueue.main.async {
                 self.RemindSwitch.isOn = reminderPending
-                self.nextFeedingCountdownLabel.text = ""
+                
+               
+                self.nextFeedingCountdownLabel.text =  self.createRemainingTimeText(interval: self.calculateNextFeedingInterval(date: self.feedData.first?.EndTime))
             }
         })
         
