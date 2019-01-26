@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		56B10B014528DDE216AAFABA /* Pods_Feeding_Memo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */; };
 		E721ABA921F926AE00F8472C /* TablePlaceholderCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */; };
+		E721ABAC21FC827100F8472C /* UITitSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAB21FC827100F8472C /* UITitSelector.swift */; };
 		E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697621F32DF200771BAD /* AppDelegate.swift */; };
 		E76E697921F32DF200771BAD /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697821F32DF200771BAD /* TableViewController.swift */; };
 		E76E697C21F32DF200771BAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76E697A21F32DF200771BAD /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 		5AFC7FA18D9C45C58BC5EE06 /* Pods-Feeding Memo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.release.xcconfig"; sourceTree = "<group>"; };
 		A77B775CCF2AD5F46900338B /* Pods-Feeding Memo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.debug.xcconfig"; sourceTree = "<group>"; };
 		E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TablePlaceholderCellView.swift; sourceTree = "<group>"; };
+		E721ABAB21FC827100F8472C /* UITitSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITitSelector.swift; sourceTree = "<group>"; };
 		E76E697321F32DF100771BAD /* Feeding Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Feeding Memo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E76E697621F32DF200771BAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E76E697821F32DF200771BAD /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +69,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E721ABAA21FC824200F8472C /* CustomUIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				E721ABAB21FC827100F8472C /* UITitSelector.swift */,
+			);
+			path = CustomUIComponents;
+			sourceTree = "<group>";
+		};
 		E76E696A21F32DF100771BAD = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +98,7 @@
 		E76E697521F32DF100771BAD /* Feeding Memo */ = {
 			isa = PBXGroup;
 			children = (
+				E721ABAA21FC824200F8472C /* CustomUIComponents */,
 				E76E699021F3B43B00771BAD /* Formatters */,
 				E76E698D21F3A2D400771BAD /* Service */,
 				E76E698A21F3A2A100771BAD /* Model */,
@@ -259,6 +270,7 @@
 				E76E698F21F3A3C700771BAD /* FeedingSessionService.swift in Sources */,
 				E76E698C21F3A2C200771BAD /* FeedingSession.swift in Sources */,
 				E76E697921F32DF200771BAD /* TableViewController.swift in Sources */,
+				E721ABAC21FC827100F8472C /* UITitSelector.swift in Sources */,
 				E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

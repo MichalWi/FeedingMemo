@@ -51,7 +51,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     var slider: Slider!
     var maskView: UIView!
     var hint: UILabel?
-    var circleButton : CircleMenu!
+    var titSelector : UITitSelector!
     
     
     let cellReuseIdentifier = "cellId"
@@ -105,56 +105,24 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         tableView.dataSource = self 
         
         //drawer
-        maskView = UIView(
+        maskView = MaskView(
             frame: CGRect(x: 0, y: view.frame.height - 160, width: view.frame.width , height: 140))
         
-        maskView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
-        maskView.isUserInteractionEnabled = false
-        maskView.alpha = 0
         view.addSubview(maskView)
         
         // circle button
-        circleButton = CircleMenu(
-            frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize),
-            normalIcon:"plus",
-            selectedIcon:"plus_filled",
-            buttonsCount: 2,
-            duration: 0.2,
-            distance: 100)
+        titSelector = UITitSelector(
+            frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize))
         
-        circleButton.subButtonsRadius = 25
-        circleButton.delegate = self
-        circleButton.startAngle = -50
-        circleButton.endAngle = 50
-        circleButton.layer.cornerRadius = circleButton.frame.size.width / 2.0
+        titSelector.delegate = self
         
         
-        view.addSubview(circleButton)
+        view.addSubview(titSelector)
         
         
         //slider
-        slider = Slider()
-        slider.frame = CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
-        slider.attributedTextForFraction = { fraction in
-            let string = "\(Int((fraction) * CGFloat(consts.maxFeedingTime))) min"
-            return NSAttributedString(string: string, attributes: [.font: UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.black), .foregroundColor: UIColor.black])
-            
-        }
-        let labelTextAttributes: [NSAttributedString.Key : Any] = [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.white]
-       
-        slider.fraction = 1
-        slider.shadowOffset = CGSize(width: 0, height: 10)
-        slider.shadowBlur = 5
-        slider.shadowColor = UIColor(white: 0, alpha: 0.1)
-        slider.contentViewColor = .gray
-        slider.valueViewColor = .white
-        slider.setMinimumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
-        slider.setMaximumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
-        
-        slider.imagesColor = UIColor.white
-        slider.valueViewColor = .white
-        slider.setMinimumImage(#imageLiteral(resourceName: "past"))
-        slider.setMaximumImage(#imageLiteral(resourceName: "future"))
+        slider = DurationSlider(frame : CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
+        )
        
         view.addSubview(slider)
      
@@ -212,7 +180,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     private func showTimeButton(){
         slider.isHidden = false
-        circleButton.isHidden = true
+        titSelector.isHidden = true
         showHint(withText: "Set Duration")
     }
     
@@ -268,7 +236,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
   
         let dy = scrollView.contentOffset.y
 
-        circleButton.frame =
+        titSelector.frame =
          CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
 
         maskView.frame =
@@ -279,8 +247,8 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         if (!scrollView.isDecelerating){
             maskView.fadeOut()
-            circleButton.hideButtons(0.2)
-            circleButton.isHidden = false
+            titSelector.hideButtons(0.2)
+            titSelector.isHidden = false
             slider.isHidden = true
             hint?.isHidden = true
         }
@@ -293,9 +261,9 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             slider.isHidden = true;
 
             self.maskView.fadeOut()
-            self.circleButton.isHidden = false;
+            self.titSelector.isHidden = false;
 
-            self.circleButton.isUserInteractionEnabled = true
+            self.titSelector.isUserInteractionEnabled = true
             
             let newFeedingSession = FeedingSession.Create(side: side, duration: Int(slider.fraction * CGFloat(consts.maxFeedingTime)), endTime: Date())
 
