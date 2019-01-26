@@ -10,6 +10,7 @@ import UIKit
 import CircleMenu
 import fluid_slider
 import SwiftDate
+import UserNotifications
 
 struct tableViewConsts {
     static let bottomMargin : CGFloat = 85
@@ -20,6 +21,51 @@ struct tableViewConsts {
 class TableViewController: UITableViewController, CircleMenuDelegate {
  
     
+    @IBAction func ReminderSwitchDidChange(_ sender: Any) {
+        if RemindSwitch.isOn {
+            
+          
+            //Seeking permission of the user to display app notifications
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in })
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Feeding timer!"
+            content.body = "Every 3 hours"
+            content.subtitle = "From Feeding Memos"
+            content.categoryIdentifier = "message"
+            
+            var interval = ((feedData.first?.EndTime) ?? Date()).addingTimeInterval(20.seconds.timeInterval).timeIntervalSinceNow
+            
+            if(interval < 0 ) {
+               interval =  (Date()).addingTimeInterval(20.seconds.timeInterval).timeIntervalSinceNow
+                
+            }
+            
+            let remainingTime = interval.toString {
+                $0.maximumUnitCount = 4
+                $0.allowedUnits = [.day, .hour, .minute]
+                $0.collapsesLargestUnit = true
+                $0.unitsStyle = .short
+            }
+            
+            nextFeedingCountdownLabel.text = "\(remainingTime)"
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+            
+            
+            let request = UNNotificationRequest.init(identifier: "FeedingReminder", content: content, trigger: trigger)
+            // Schedule the notification.
+            
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: {(_ error: Error?) -> Void in
+                if error == nil {
+                    
+                   
+                }
+            })
+        } else {
+           UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["FeedingReminder"])
+        }
+    }
     @IBOutlet weak var HeaderLabel: UILabel!
     @IBOutlet weak var RemindSwitch: UISwitch!
     
@@ -32,6 +78,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     @IBOutlet weak var nextFeedingCountdownLabel: UILabel!
     
     //UI
+    @IBOutlet weak var NextFeedingTimeSwitchLabel: UILabel!
     var slider: Slider!
     var maskView: UIView!
     var hint: UILabel?
@@ -89,6 +136,18 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         tableView.delegate = self
         tableView.dataSource = self
          self.tableView.contentInset = UIEdgeInsets(top: 15,left: 0,bottom: 0,right: 0)
+        
+        //switch reminder
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: {
+            let reminderPending = $0.contains{
+                $0.identifier == "FeedingReminder"
+            }
+            
+            DispatchQueue.main.async {
+                self.RemindSwitch.isOn = reminderPending
+                self.nextFeedingCountdownLabel.text = ""
+            }
+        })
         
         //drawer
         maskView = MaskView(

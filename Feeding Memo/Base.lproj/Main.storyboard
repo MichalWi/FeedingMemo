@@ -30,6 +30,9 @@
                                     <constraints>
                                         <constraint firstAttribute="width" constant="49" id="e58-E2-7kP"/>
                                     </constraints>
+                                    <connections>
+                                        <action selector="ReminderSwitchDidChange:" destination="ZYK-r8-M7u" eventType="valueChanged" id="ibm-WH-jjv"/>
+                                    </connections>
                                 </switch>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feeding Memos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hxx-ML-vne">
                                     <rect key="frame" x="15" y="9" width="230" height="36"/>
@@ -37,14 +40,14 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(40 minutes)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZU0-7A-daf">
-                                    <rect key="frame" x="165" y="65" width="62" height="12"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="40 minutes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZU0-7A-daf">
+                                    <rect key="frame" x="107.5" y="61" width="73" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remind me about next" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2p-AW-Xwk">
-                                    <rect key="frame" x="15" y="61" width="145" height="17"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remind me in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2p-AW-Xwk">
+                                    <rect key="frame" x="15" y="61" width="87.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -247,6 +250,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="HeaderLabel" destination="hxx-ML-vne" id="oAJ-5m-gTJ"/>
+                        <outlet property="NextFeedingTimeSwitchLabel" destination="ZU0-7A-daf" id="B9x-zK-d9c"/>
                         <outlet property="RemindSwitch" destination="oAB-7Y-d4D" id="3IK-0T-5Pw"/>
                         <outlet property="nextFeedingCountdownLabel" destination="ZU0-7A-daf" id="Qfl-Ov-BVa"/>
                     </connections>
