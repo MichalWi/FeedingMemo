@@ -50,7 +50,7 @@ public class TableCellView: UITableViewCell {
         
         ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
         
-        ProgressLabel.text = "Duration: \(feedingSession.Duration) min"
+        ProgressLabel.text = "Duration".localized + ": \(feedingSession.Duration) min"
         
         RightArrow.alpha = feedingSession.Side == .Left ? 0.3 : 1
         LeftArrow.alpha = feedingSession.Side == .Right  ? 0.3 : 1

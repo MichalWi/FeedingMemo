@@ -75,10 +75,15 @@ class ReminderService {
         
     }
     
-    public func addFeedingReminder(toSession session: FeedingSession?) {
-        
+    public func addFeedingReminder(fromSession session: FeedingSession?) {
+        removeReminder()
         if(session != nil){
-            let interval = FeedingTime(feedingSession: session!).nextFeedingInterval()
+            var interval = FeedingTime(feedingSession: session!).nextFeedingInterval()
+            
+            if interval < 0 {
+                interval = FeedingTime.defaultNextFeedingTime()
+            }
+            
             addReminder(remindMeIn: interval)
         }  else{
             let interval = FeedingTime.defaultNextFeedingTime()
@@ -96,8 +101,8 @@ class ReminderService {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in })
         
         let content = UNMutableNotificationContent()
-        content.title = "Feeding Memo!"
-        content.body = "Every 3 hours since last feeding sesion"
+        content.title = "Feeding Memo!".localized
+        content.body = "3 hours passed since last feeding sesion".localized
         content.categoryIdentifier = "message"
         
         

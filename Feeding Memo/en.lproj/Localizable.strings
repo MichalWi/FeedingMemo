@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Feeding Memo
+
+  Created by Mich W on 27/01/2019.
+  Copyright © 2019 Mich W. All rights reserved.
+*/
+"Select Side" = "Select Side";
+"Set Duration" = "Set Duration";
+"Duration" = "Duration";
+"3 hours passed since last feeding sesion" = "3 hours passed since last feeding sesion";

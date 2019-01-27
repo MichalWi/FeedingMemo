@@ -1,0 +1,30 @@
+
+/* Class = "UILabel"; text = "09:45"; ObjectID = "BE1-zM-lOI"; */
+"BE1-zM-lOI.text" = "09:45";
+
+/* Class = "UILabel"; text = "Remind me in"; ObjectID = "K2p-AW-Xwk"; */
+"K2p-AW-Xwk.text" = "Przypomnij za";
+
+/* Class = "UILabel"; text = "13:45"; ObjectID = "K64-tL-RfD"; */
+"K64-tL-RfD.text" = "13:45";
+
+/* Class = "UILabel"; text = "45 minutes ago"; ObjectID = "LpP-02-UDg"; */
+"LpP-02-UDg.text" = "45 minutes ago";
+
+/* Class = "UILabel"; text = "Duration: 45 min"; ObjectID = "QTh-Uv-1x5"; */
+"QTh-Uv-1x5.text" = "Czas trwania: 45 min";
+
+/* Class = "UILabel"; text = "40 minutes"; ObjectID = "ZU0-7A-daf"; */
+"ZU0-7A-daf.text" = "40 minutes";
+
+/* Class = "UITableViewController"; title = "Feeding list"; ObjectID = "ZYK-r8-M7u"; */
+"ZYK-r8-M7u.title" = "Feeding list";
+
+/* Class = "UILabel"; text = "Feeding Memos"; ObjectID = "hxx-ML-vne"; */
+"hxx-ML-vne.text" = "Feeding Memos";
+
+/* Class = "UILabel"; text = "Next"; ObjectID = "lMr-y9-lax"; */
+"lMr-y9-lax.text" = "Następne";
+
+/* Class = "UILabel"; text = "39 min"; ObjectID = "wzp-aJ-duU"; */
+"wzp-aJ-duU.text" = "39 min";

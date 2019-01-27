@@ -27,11 +27,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     @IBAction func ReminderSwitchDidChange(_ sender: Any) {
         if RemindSwitch.isOn {
-            reminderService.addFeedingReminder(toSession: feedData.first)
+            reminderService.addFeedingReminder(fromSession: feedData.first)
         } else {
             reminderService.removeReminder()
         }
         updateIntervalLabel()
+        self.tableView.reloadData()
     }
     @IBOutlet weak var HeaderLabel: UILabel!
     @IBOutlet weak var RemindSwitch: UISwitch!
@@ -39,7 +40,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     
     var feedData : [FeedingSession] = []
-    var sections : [MonthSection] = []
+    var sections : [DaySection] = []
     
     @IBOutlet weak var nextFeedingCountdownLabel: UILabel!
     
@@ -52,7 +53,6 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     
     let cellReuseIdentifier = "cellId"
-    let placeholderCellReuseIdentifier = "placeholderCellId"
     
     override func viewDidLoad()
     {
@@ -66,22 +66,23 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     }
     
     fileprivate func reloadDataSource(){
+        
         self.feedData = self.DB.GetFeedingSessions()
         
         let groups = Dictionary(grouping: self.feedData) { (feedingSession:FeedingSession) in
-            return firstDayOfMonth(date: feedingSession.EndTime)
+            return firstHourOfAday(date: feedingSession.EndTime)
         }
         
-        self.sections = groups.map { (arg) -> MonthSection in
+        self.sections = groups.map { (arg) -> DaySection in
             let (key, values) = arg
-            return MonthSection(day: key, feeding: values)
+            return DaySection(day: key, feeding: values)
             }.sorted()
         
         
         
     }
     
-    fileprivate func firstDayOfMonth(date : Date) -> Date {
+    fileprivate func firstHourOfAday(date : Date) -> Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         return calendar.date(from: components)!
@@ -94,7 +95,8 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         let section =  self.sections[section]
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "DD MMMM yyyy"
+        dateFormatter.dateFormat = "EEEE"
+      
         return dateFormatter.string(from: section.day)
     }
     
@@ -168,7 +170,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         button.backgroundColor = .gray
         
         
-        showHint(withText: "Select Side")
+        showHint(withText: "Select Side".localized)
         maskView.fadeIn()
         
     }
@@ -207,7 +209,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     private func showTimeButton(){
         slider.isHidden = false
         titSelector.isHidden = true
-        showHint(withText: "Set Duration")
+        showHint(withText: "Set Duration".localized)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -259,18 +261,21 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         return slider?.isHidden ?? true
     }
     
+    
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+      
         if editingStyle == .delete {
-            
             
             let id = self.feedData[indexPath.row].Id
             self.DB.RemoveFeedingSession(id)
             reloadDataSource()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.tableView.reloadData()
-                
-            })
+//            self.tableView.beginUpdates()
+//            self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+//            self.tableView.endUpdates()
+             self.tableView.reloadData()
+           
         }
     }
     
@@ -327,11 +332,17 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             
             self.tableView.endUpdates()
             
-            self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
+//            self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
             
             if self.hint != nil {
                 self.hint!.removeFromSuperview()
             }
+            
+            if self.RemindSwitch.isOn {
+                self.reminderService.addFeedingReminder(fromSession: self.feedData.first)
+            }
+            
+            self.updateIntervalLabel()
             
         }
     }
@@ -356,12 +367,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
 }
 
-struct MonthSection : Comparable {
-    static func < (lhs: MonthSection, rhs: MonthSection) -> Bool {
+struct DaySection : Comparable {
+    static func < (lhs: DaySection, rhs: DaySection) -> Bool {
         return lhs.day > rhs.day
     }
     
-    static func == (lhs: MonthSection, rhs: MonthSection) -> Bool {
+    static func == (lhs: DaySection, rhs: DaySection) -> Bool {
         return lhs.day == rhs.day
     }
     var day : Date

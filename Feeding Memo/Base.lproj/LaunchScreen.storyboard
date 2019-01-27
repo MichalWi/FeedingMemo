@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,11 +15,11 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rybkaje" translatesAutoresizingMaskIntoConstraints="NO" id="9Mw-dF-9Wn">
-                                <rect key="frame" x="50" y="207.5" width="275" height="252"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rybkaje" translatesAutoresizingMaskIntoConstraints="NO" id="9Mw-dF-9Wn">
+                                <rect key="frame" x="50" y="183" width="220" height="202"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="9Mw-dF-9Wn" secondAttribute="height" multiplier="531:487" id="bg4-rX-StO"/>
                                 </constraints>
@@ -41,6 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="rybkaje" width="531" height="487"/>
+        <image name="rybkaje" width="151" height="151"/>
     </resources>
 </document>

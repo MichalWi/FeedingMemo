@@ -37,7 +37,7 @@ public class FeedingSessionService {
         
        
         
-        feedingSessions.append(sessionToAdd)
+        feedingSessions.insert(sessionToAdd, at: 0)
         
         try? Disk.save(feedingSessions, to: .documents, as: defaultsKeys.dataKey)
     }

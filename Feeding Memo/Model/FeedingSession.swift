@@ -76,13 +76,7 @@ public struct FeedingSession: Codable {
             $0.unitsStyle = .short
             }
     }
-    
-    
-    public func toTextRepresentation() -> String {
-        
-        return "From \(HourFormatter.formatDate(StartTime)) To \(HourFormatter.formatDate(EndTime)) (\(Duration) min) on \(Side) side"
-    }
-    
+     
     
 }
 
