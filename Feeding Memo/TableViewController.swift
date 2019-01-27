@@ -19,65 +19,23 @@ struct tableViewConsts {
 }
 
 class TableViewController: UITableViewController, CircleMenuDelegate {
- 
-    private func createRemainingTimeText(interval : TimeInterval) -> String {
-        return interval.toString {
-            $0.maximumUnitCount = 4
-            $0.allowedUnits = [.day, .hour, .minute]
-            $0.collapsesLargestUnit = true
-            $0.unitsStyle = .short
-        }
-    }
     
-    private func calculateNextFeedingInterval(date : Date?) -> TimeInterval {
-       let interval = ((date) ?? Date()).addingTimeInterval(3.hours.timeInterval).timeIntervalSinceNow
-        
-        if(interval < 0) {
-            return (Date()).addingTimeInterval(3.hours.timeInterval).timeIntervalSinceNow
-        }
-        
-        return interval;
-    }
+    
+    let DB = FeedingSessionService()
+    
+    let reminderService = ReminderService()
     
     @IBAction func ReminderSwitchDidChange(_ sender: Any) {
         if RemindSwitch.isOn {
-            
-          
-            //Seeking permission of the user to display app notifications
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler: {didAllow,Error in })
-            
-            let content = UNMutableNotificationContent()
-            content.title = "Feeding Memo!"
-            content.body = "Every 3 hours"
-            content.categoryIdentifier = "message"
-            
-            let interval = calculateNextFeedingInterval(date: feedData.first?.EndTime)
-            
-            
-            let remainingTime = createRemainingTimeText(interval: interval)
-            
-            nextFeedingCountdownLabel.text = "\(remainingTime)"
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
-            
-            
-            let request = UNNotificationRequest.init(identifier: "FeedingReminder", content: content, trigger: trigger)
-            // Schedule the notification.
-            
-            UNUserNotificationCenter.current().add(request, withCompletionHandler: {(_ error: Error?) -> Void in
-                if error == nil {
-                    
-                   
-                }
-            })
+            reminderService.addFeedingReminder(toSession: feedData.first)
         } else {
-           UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["FeedingReminder"])
+            reminderService.removeReminder()
         }
+        updateIntervalLabel()
     }
     @IBOutlet weak var HeaderLabel: UILabel!
     @IBOutlet weak var RemindSwitch: UISwitch!
     
-    let Service = FeedingSessionService()
     
     
     var feedData : [FeedingSession] = []
@@ -103,12 +61,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         reloadDataSource()
         
         initComponents()
-   
-       
+        
+        
     }
     
     fileprivate func reloadDataSource(){
-        self.feedData = self.Service.GetFeedingSessions()
+        self.feedData = self.DB.GetFeedingSessions()
         
         let groups = Dictionary(grouping: self.feedData) { (feedingSession:FeedingSession) in
             return firstDayOfMonth(date: feedingSession.EndTime)
@@ -118,7 +76,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             let (key, values) = arg
             return MonthSection(day: key, feeding: values)
             }.sorted()
-                
+        
         
         
     }
@@ -131,7 +89,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
     }
-   
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         let section =  self.sections[section]
@@ -140,24 +98,38 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         return dateFormatter.string(from: section.day)
     }
     
+    func updateIntervalLabel () {
+        reminderService.getNextReminderTime() { intervalText in
+            
+            DispatchQueue.main.async {
+                
+                self.RemindSwitch.isOn = intervalText != nil
+                
+                if let interval = intervalText {
+                    self.nextFeedingCountdownLabel.text = "\(interval)"
+                }
+                else
+                {
+                    if(self.feedData.count > 0){
+                        self.nextFeedingCountdownLabel.text = FeedingTime(feedingSession: self.feedData.first!).redableNextFeedingInterval()
+                    }else{
+                         self.nextFeedingCountdownLabel.text = FeedingTime.defaultRedableNextFeedingTime()
+                    }
+                  
+                }
+            }
+        }
+        
+    }
+    
     func initComponents(){
         tableView.delegate = self
         tableView.dataSource = self
-         self.tableView.contentInset = UIEdgeInsets(top: 15,left: 0,bottom: 0,right: 0)
+        self.tableView.contentInset = UIEdgeInsets(top: 15,left: 0,bottom: 0,right: 0)
         
-        //switch reminder
-        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: {
-            let reminderPending = $0.contains{
-                $0.identifier == "FeedingReminder"
-            }
-            
-            DispatchQueue.main.async {
-                self.RemindSwitch.isOn = reminderPending
-                
-               
-                self.nextFeedingCountdownLabel.text =  self.createRemainingTimeText(interval: self.calculateNextFeedingInterval(date: self.feedData.first?.EndTime))
-            }
-        })
+        // reminder
+        updateIntervalLabel()
+        
         
         //drawer
         maskView = MaskView(
@@ -178,14 +150,14 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         //slider
         slider = DurationSlider(frame : CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
         )
-       
+        
         view.addSubview(slider)
-     
+        
         slider.isHidden = true;
     }
     
     
-     func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int) {
+    func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int) {
         if atIndex == 0 {
             button.setImage(#imageLiteral(resourceName: "left_footprint"), for: .normal)
         }
@@ -195,7 +167,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         button.backgroundColor = .gray
         
-      
+        
         showHint(withText: "Select Side")
         maskView.fadeIn()
         
@@ -230,7 +202,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         view.addSubview(hint!)
     }
-   
+    
     
     private func showTimeButton(){
         slider.isHidden = false
@@ -258,7 +230,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         let data = section.feeding[indexPath.row]
         
         let cell : TableCellView = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! TableCellView
-    
+        
         let allFeeds = feedData.sorted {
             $0.EndTime < $1.EndTime
         }
@@ -266,10 +238,10 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         let index = allFeeds.firstIndex {
             $0.Id == data.Id
         }
-       
+        
         var endTime = Date()
         if(index != nil && index! > 0 && allFeeds.count != index ){
-           
+            
             let prev = allFeeds[index! - 1]
             endTime = prev.EndTime
         }
@@ -279,7 +251,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         
         
         return cell
-       
+        
     }
     
     
@@ -289,13 +261,12 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-       
-
+            
+            
             let id = self.feedData[indexPath.row].Id
-            self.Service.RemoveFeedingSession(id)
+            self.DB.RemoveFeedingSession(id)
             reloadDataSource()
             
-           // self.tableView.deleteRows(at: [indexPath], with: .automatic)
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                 self.tableView.reloadData()
                 
@@ -304,18 +275,18 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-  
+        
         let dy = scrollView.contentOffset.y
         if(titSelector == nil) {
             return
         }
         titSelector.frame =
-         CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
-
-        maskView.frame =
-           CGRect(x: 0, y: view.frame.height - 160 + dy + 20, width: view.frame.width , height: 140)
+            CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
         
-         slider.frame =
+        maskView.frame =
+            CGRect(x: 0, y: view.frame.height - 160 + dy + 20, width: view.frame.width , height: 140)
+        
+        slider.frame =
             CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50 + dy + 20, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
         
         if (!scrollView.isDecelerating){
@@ -332,49 +303,42 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     private func configureAddingFeedingSession(side : Side){
         slider.didEndTracking = { (slider) -> () in
             slider.isHidden = true;
-
+            
             self.maskView.fadeOut()
             self.titSelector.isHidden = false;
-
+            
             self.titSelector.isUserInteractionEnabled = true
             
             let newFeedingSession = FeedingSession.Create(side: side, duration: Int(slider.fraction * CGFloat(consts.maxFeedingTime)), endTime: Date())
-
-            self.Service.AddFeedingSession(newFeedingSession)
+            
+            self.DB.AddFeedingSession(newFeedingSession)
             self.reloadDataSource()
-           
+            
             self.tableView.beginUpdates()
-            let newSection = Date().dateAtBeginningOfDay() != self.feedData[1].EndTime.dateAtBeginningOfDay()
+            
+            let newSection = (self.feedData.count > 1 && Date().dateAtBeginningOfDay() != self.feedData[1].EndTime.dateAtBeginningOfDay()) || self.feedData.count == 1
             if(newSection) {
-                
                 self.tableView.insertSections([0] , with: .automatic)
             }
-          
+            
             let indexPath = IndexPath(row: 0, section: 0)
             self.tableView.insertRows(at: [indexPath], with: .automatic)
             // insert row in table
-           
+            
             self.tableView.endUpdates()
-
+            
             self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
- 
+            
             if self.hint != nil {
                 self.hint!.removeFromSuperview()
             }
-
+            
         }
-    }
-    
-    private func calculateMinutesSinceFeeding(startTime: Date, endTime : Date) -> Int{
-        
-        let components = Calendar.current.dateComponents([.minute], from: startTime, to: endTime)
- 
-        return Int(components.minute ?? 0)
     }
     
     
     func groupByFullDays(feedingSessions : [FeedingSession]) -> [Date:[FeedingSession]] {
-
+        
         var grouped : [Date:[FeedingSession]] = [:]
         
         for fs in feedingSessions {
@@ -387,7 +351,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         }
         
         return grouped
- 
+        
     }
     
 }

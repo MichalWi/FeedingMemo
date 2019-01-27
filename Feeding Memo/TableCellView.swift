@@ -34,26 +34,19 @@ public class TableCellView: UITableViewCell {
     
     public func set(feedingSession : FeedingSession, prevFeeding : Date){
         MainHour.text = HourFormatter.formatDate(feedingSession.EndTime)
-        NextHour.text = HourFormatter.formatDate(feedingSession.EndTime.addingTimeInterval(TimeInterval(exactly: 60 * 60 * const.feedInterval) ?? 0 ))
         
         if(feedingSession.Duration > 10) {
-            ProgressBar.tintColor = .green
+            ProgressBar.tintColor = UIColor(named : "SoftGeen")
+            ProgressLabel.textColor = UIColor(named: "SoftGreenText")
         }else{
-            ProgressBar.tintColor = .red
+            ProgressBar.tintColor = UIColor(named: "SoftRed")
+            ProgressLabel.textColor = UIColor(named: "SoftRedText")
         }
         
-        let a = DateInRegion(feedingSession.EndTime)
-        let b = DateInRegion(prevFeeding)
-    
-        let interval = (b - a).toString {
-            $0.maximumUnitCount = 4
-            $0.allowedUnits = [.day, .hour, .minute]
-            $0.collapsesLargestUnit = true
-            $0.unitsStyle = .short
-        }
-        DurationLabel.text = "\(interval) gap"
         
-        NextLabel.text = a.toRelative()
+        DurationLabel.text = "\(feedingSession.colloquialTimeDistance(date: prevFeeding))"
+        
+        NextLabel.text = feedingSession.colloquialTimeAgo()
         
         ProgressBar.progress = getProgressFloat(duration: feedingSession.Duration)
         
@@ -63,6 +56,8 @@ public class TableCellView: UITableViewCell {
         LeftArrow.alpha = feedingSession.Side == .Right  ? 0.3 : 1
         
     }
+    
+   
     
     private func getProgressFloat(duration : Int) -> Float{
          

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftDate
 
 public enum Side : String, Codable{
     case Left
@@ -49,10 +50,40 @@ public struct FeedingSession: Codable {
         return FeedingSession(Id: FeedingSessionId(Id: Date()), side: side, duration: duration, endTime: endTime)
     }
     
+    public func timeIntervalSince(date : Date?) -> TimeInterval {
+        
+        return self.EndTime.timeIntervalSince(date ?? Date())
+    }
+    
+    public func colloquialTimeAgo() -> String {
+        return self.EndTime.toRelative()
+    }
+    
+    public func colloquialTimeDistance(date : Date?) -> String {
+        
+        let a = date ?? Date()
+        
+        let interval = timeIntervalSince(date: a)
+        
+        if(interval < 0) {
+            return ""
+        }
+        
+        return interval.toString {
+            $0.maximumUnitCount = 4
+            $0.allowedUnits = [.day, .hour, .minute]
+            $0.collapsesLargestUnit = true
+            $0.unitsStyle = .short
+            }
+    }
+    
+    
     public func toTextRepresentation() -> String {
         
         return "From \(HourFormatter.formatDate(StartTime)) To \(HourFormatter.formatDate(EndTime)) (\(Duration) min) on \(Side) side"
     }
+    
+    
 }
 
 public struct FeedingSessionId : Codable{

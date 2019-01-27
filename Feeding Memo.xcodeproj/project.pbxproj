@@ -8,16 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		56B10B014528DDE216AAFABA /* Pods_Feeding_Memo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */; };
-		E721ABA921F926AE00F8472C /* TablePlaceholderCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */; };
 		E721ABAC21FC827100F8472C /* UITitSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAB21FC827100F8472C /* UITitSelector.swift */; };
 		E721ABAE21FC8E3C00F8472C /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAD21FC8E3C00F8472C /* MaskView.swift */; };
 		E721ABB021FC8E4800F8472C /* DurationSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABAF21FC8E4800F8472C /* DurationSlider.swift */; };
 		E721ABB421FC8EE600F8472C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABB321FC8EE600F8472C /* DateExtensions.swift */; };
 		E721ABB621FC8F2E00F8472C /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABB521FC8F2E00F8472C /* Defaults.swift */; };
+		E721ABB821FCD90300F8472C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E721ABB721FCD90300F8472C /* Assets.xcassets */; };
+		E721ABBA21FD11C400F8472C /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721ABB921FD11C400F8472C /* ReminderService.swift */; };
 		E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697621F32DF200771BAD /* AppDelegate.swift */; };
 		E76E697921F32DF200771BAD /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E697821F32DF200771BAD /* TableViewController.swift */; };
 		E76E697C21F32DF200771BAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76E697A21F32DF200771BAD /* Main.storyboard */; };
-		E76E697E21F32DF700771BAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E76E697D21F32DF700771BAD /* Assets.xcassets */; };
 		E76E698121F32DF700771BAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76E697F21F32DF700771BAD /* LaunchScreen.storyboard */; };
 		E76E698921F33A5600771BAD /* TableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E698821F33A5600771BAD /* TableCellView.swift */; };
 		E76E698C21F3A2C200771BAD /* FeedingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E698B21F3A2C200771BAD /* FeedingSession.swift */; };
@@ -29,17 +29,17 @@
 		54853C34DA3CD42E5704CE4A /* Pods_Feeding_Memo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Feeding_Memo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AFC7FA18D9C45C58BC5EE06 /* Pods-Feeding Memo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.release.xcconfig"; sourceTree = "<group>"; };
 		A77B775CCF2AD5F46900338B /* Pods-Feeding Memo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeding Memo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Feeding Memo/Pods-Feeding Memo.debug.xcconfig"; sourceTree = "<group>"; };
-		E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TablePlaceholderCellView.swift; sourceTree = "<group>"; };
 		E721ABAB21FC827100F8472C /* UITitSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITitSelector.swift; sourceTree = "<group>"; };
 		E721ABAD21FC8E3C00F8472C /* MaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskView.swift; sourceTree = "<group>"; };
 		E721ABAF21FC8E4800F8472C /* DurationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationSlider.swift; sourceTree = "<group>"; };
 		E721ABB321FC8EE600F8472C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		E721ABB521FC8F2E00F8472C /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		E721ABB721FCD90300F8472C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E721ABB921FD11C400F8472C /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
 		E76E697321F32DF100771BAD /* Feeding Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Feeding Memo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E76E697621F32DF200771BAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E76E697821F32DF200771BAD /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		E76E697B21F32DF200771BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E76E697D21F32DF700771BAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E76E698021F32DF700771BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E76E698221F32DF700771BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E76E698821F33A5600771BAD /* TableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCellView.swift; sourceTree = "<group>"; };
@@ -124,12 +124,11 @@
 				E76E697621F32DF200771BAD /* AppDelegate.swift */,
 				E76E697821F32DF200771BAD /* TableViewController.swift */,
 				E76E697A21F32DF200771BAD /* Main.storyboard */,
-				E76E697D21F32DF700771BAD /* Assets.xcassets */,
 				E76E697F21F32DF700771BAD /* LaunchScreen.storyboard */,
 				E76E698221F32DF700771BAD /* Info.plist */,
 				E76E698821F33A5600771BAD /* TableCellView.swift */,
-				E721ABA821F926AE00F8472C /* TablePlaceholderCellView.swift */,
 				E721ABB521FC8F2E00F8472C /* Defaults.swift */,
+				E721ABB721FCD90300F8472C /* Assets.xcassets */,
 			);
 			path = "Feeding Memo";
 			sourceTree = "<group>";
@@ -146,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				E76E698E21F3A3C700771BAD /* FeedingSessionService.swift */,
+				E721ABB921FD11C400F8472C /* ReminderService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -219,7 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E76E698121F32DF700771BAD /* LaunchScreen.storyboard in Resources */,
-				E76E697E21F32DF700771BAD /* Assets.xcassets in Resources */,
+				E721ABB821FCD90300F8472C /* Assets.xcassets in Resources */,
 				E76E697C21F32DF200771BAD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,7 +288,6 @@
 			files = (
 				E721ABB021FC8E4800F8472C /* DurationSlider.swift in Sources */,
 				E76E699221F3B44F00771BAD /* HourFormatter.swift in Sources */,
-				E721ABA921F926AE00F8472C /* TablePlaceholderCellView.swift in Sources */,
 				E721ABAE21FC8E3C00F8472C /* MaskView.swift in Sources */,
 				E76E698921F33A5600771BAD /* TableCellView.swift in Sources */,
 				E721ABB421FC8EE600F8472C /* DateExtensions.swift in Sources */,
@@ -298,6 +297,7 @@
 				E721ABB621FC8F2E00F8472C /* Defaults.swift in Sources */,
 				E721ABAC21FC827100F8472C /* UITitSelector.swift in Sources */,
 				E76E697721F32DF200771BAD /* AppDelegate.swift in Sources */,
+				E721ABBA21FD11C400F8472C /* ReminderService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
