@@ -18,29 +18,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rybkaje" translatesAutoresizingMaskIntoConstraints="NO" id="9Mw-dF-9Wn">
-                                <rect key="frame" x="50" y="183" width="220" height="202"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="9Mw-dF-9Wn" secondAttribute="height" multiplier="531:487" id="bg4-rX-StO"/>
-                                </constraints>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="BYa-jP-Jgd">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo Big" translatesAutoresizingMaskIntoConstraints="NO" id="iHg-HJ-DwT">
+                                <rect key="frame" x="55.5" y="210" width="209" height="148"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="9Mw-dF-9Wn" secondAttribute="trailing" constant="50" id="KcK-Ga-egz"/>
-                            <constraint firstItem="9Mw-dF-9Wn" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qfD-uS-4fC"/>
-                            <constraint firstItem="9Mw-dF-9Wn" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="50" id="xlJ-Xv-fTg"/>
-                            <constraint firstItem="9Mw-dF-9Wn" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="xow-vq-wdR"/>
+                            <constraint firstItem="BYa-jP-Jgd" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="2b9-Gd-a4p"/>
+                            <constraint firstItem="iHg-HJ-DwT" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ERC-XM-YpR"/>
+                            <constraint firstItem="BYa-jP-Jgd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="MoL-Sb-l5d"/>
+                            <constraint firstItem="iHg-HJ-DwT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="55.5" id="TCs-pL-MQ7"/>
+                            <constraint firstItem="iHg-HJ-DwT" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="e2r-4P-N0X"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="iHg-HJ-DwT" secondAttribute="trailing" constant="55.5" id="pho-lB-5Pt"/>
+                            <constraint firstItem="BYa-jP-Jgd" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="wuc-1v-3UO"/>
+                            <constraint firstItem="BYa-jP-Jgd" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="wyc-KK-Mce"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52" y="374.66266866566718"/>
+            <point key="canvasLocation" x="50.625" y="373.94366197183098"/>
         </scene>
     </scenes>
     <resources>
-        <image name="rybkaje" width="151" height="151"/>
+        <image name="Logo Big" width="209" height="148"/>
+        <image name="bg" width="320" height="568"/>
     </resources>
 </document>

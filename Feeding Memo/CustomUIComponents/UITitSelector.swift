@@ -17,7 +17,7 @@ class UITitSelector : CircleMenu {
         super.init(
             frame: frame,
             normalIcon:"plus",
-            selectedIcon:"plus_filled",
+            selectedIcon:"plusFilled",
             buttonsCount: 2,
             duration: 0.2,
             distance: 100)

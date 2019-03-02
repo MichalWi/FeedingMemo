@@ -31,7 +31,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         } else {
             reminderService.removeReminder()
         }
-        updateIntervalLabel()
+       // updateIntervalLabel()
         self.tableView.reloadData()
     }
     @IBOutlet weak var HeaderLabel: UILabel!
@@ -100,7 +100,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         return dateFormatter.string(from: section.day)
     }
     
-    func updateIntervalLabel () {
+    func updateIntervalLabel1 () {
         reminderService.getNextReminderTime() { intervalText in
             
             DispatchQueue.main.async {
@@ -113,7 +113,14 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
                 else
                 {
                     if(self.feedData.count > 0){
-                        self.nextFeedingCountdownLabel.text = FeedingTime(feedingSession: self.feedData.first!).redableNextFeedingInterval()
+                        
+                        let ft = FeedingTime(feedingSession: self.feedData.first!)
+                        
+                        if ft.nextFeedingInterval() > 0 {
+                            self.nextFeedingCountdownLabel.text = ft.redableNextFeedingInterval()
+                        } else {
+                            self.nextFeedingCountdownLabel.text = FeedingTime.defaultRedableNextFeedingTime()
+                        }
                     }else{
                          self.nextFeedingCountdownLabel.text = FeedingTime.defaultRedableNextFeedingTime()
                     }
@@ -127,21 +134,20 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
     func initComponents(){
         tableView.delegate = self
         tableView.dataSource = self
-        self.tableView.contentInset = UIEdgeInsets(top: 15,left: 0,bottom: 0,right: 0)
-        
+ 
         // reminder
-        updateIntervalLabel()
+       // updateIntervalLabel()
         
         
         //drawer
         maskView = MaskView(
-            frame: CGRect(x: 0, y: view.frame.height - 160, width: view.frame.width , height: 140))
+            frame: CGRect(x: 0, y: view.frame.height - 191, width: view.frame.width , height: 191))
         
         view.addSubview(maskView)
         
         // circle button
         titSelector = UITitSelector(
-            frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize))
+            frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize / 2), y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize))
         
         titSelector.delegate = self
         
@@ -156,18 +162,27 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         view.addSubview(slider)
         
         slider.isHidden = true;
+        
+        
+        // image
+        
+        let tempImageView = UIImageView(image: UIImage(named: "bgCopy"))
+        tempImageView.frame = self.tableView.frame
+        self.tableView.backgroundView = tempImageView;
     }
     
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int) {
         if atIndex == 0 {
-            button.setImage(#imageLiteral(resourceName: "left_footprint"), for: .normal)
+            button.setImage(#imageLiteral(resourceName: "leftButton"), for: .normal)
         }
         if atIndex == 1{
-            button.setImage(#imageLiteral(resourceName: "right_footprint"), for: .normal)
+            button.setImage(#imageLiteral(resourceName: "rightButton"), for: .normal)
         }
         
-        button.backgroundColor = .gray
+        button.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
         
         
         showHint(withText: "Select Side".localized)
@@ -195,8 +210,11 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         hint = UILabel()
         
         hint!.removeFromSuperview()
+       
         
-        hint!.attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium), .foregroundColor: UIColor.black])
+        hint!.attributedText = NSAttributedString(string: text, attributes: [.font:  UIFont(name: "Heebo-Regular", size: 12.0)!, .foregroundColor: UIColor(red: 153.0 / 255.0, green: 121.0 / 255.0, blue: 121.0 / 255.0, alpha: 1.0)])
+        
+       
         
         let w = hint!.intrinsicContentSize.width
         
@@ -217,15 +235,22 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         let section = self.sections[section]
         return section.feeding.count
     }
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        if(section == 0){
-            return 40
-        }else{
-            return 10
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        if indexPath.row == 0 && indexPath.section == 0 {
+            return 65.0;
         }
-        
+        return 50.0;//Choose your custom row height
     }
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//
+//        if(section == 0){
+//            return 40
+//        }else{
+//            return 10
+//        }
+//
+//    }
     internal override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let section = self.sections[indexPath.section]
@@ -248,9 +273,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             endTime = prev.EndTime
         }
         
-        
-        cell.set(feedingSession: data, prevFeeding: endTime)
-        
+        cell.set(feedingSession: data, prevFeeding: endTime, isOnTop: (indexPath.section == 0) && (indexPath.row == 0))
         
         return cell
         
@@ -271,10 +294,8 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             self.DB.RemoveFeedingSession(id)
             reloadDataSource()
             
-//            self.tableView.beginUpdates()
-//            self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-//            self.tableView.endUpdates()
-             self.tableView.reloadData()
+            self.tableView.reloadData()
+           // self.updateIntervalLabel()
            
         }
     }
@@ -289,7 +310,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize/2), y: view.frame.height - tableViewConsts.bottomMargin + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
         
         maskView.frame =
-            CGRect(x: 0, y: view.frame.height - 160 + dy + 20, width: view.frame.width , height: 140)
+            CGRect(x: 0, y: view.frame.height - 190 + dy + 20, width: view.frame.width , height: 190)
         
         slider.frame =
             CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50 + dy + 20, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
@@ -332,17 +353,15 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
             
             self.tableView.endUpdates()
             
-//            self.tableView.setContentOffset(CGPoint(x: 0, y:  -20), animated: true)
-            
             if self.hint != nil {
                 self.hint!.removeFromSuperview()
             }
             
-            if self.RemindSwitch.isOn {
-                self.reminderService.addFeedingReminder(fromSession: self.feedData.first)
-            }
+//            if self.RemindSwitch.isOn {
+//                self.reminderService.addFeedingReminder(fromSession: self.feedData.first)
+//            }
             
-            self.updateIntervalLabel()
+            //self.updateIntervalLabel()
             
         }
     }
@@ -364,7 +383,7 @@ class TableViewController: UITableViewController, CircleMenuDelegate {
         return grouped
         
     }
-    
+     
 }
 
 struct DaySection : Comparable {

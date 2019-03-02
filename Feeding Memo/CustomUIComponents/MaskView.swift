@@ -10,7 +10,7 @@ import Foundation
 
 import UIKit
 
-class MaskView : UIView {
+class MaskView : UIImageView {
     
     public required convenience init?(coder aDecoder: NSCoder) {
         self.init(coder: aDecoder)
@@ -21,8 +21,8 @@ class MaskView : UIView {
         super.init(frame: frame)
         
         self.frame = frame
-        
-        self.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+         
+        self.image = #imageLiteral(resourceName: "mask")
         self.isUserInteractionEnabled = false
         self.alpha = 0
         

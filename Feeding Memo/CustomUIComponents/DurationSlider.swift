@@ -28,24 +28,31 @@ class DurationSlider : Slider {
             
             let string = "\(min) min"
             
-            return NSAttributedString(string: string, attributes: [.font: UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.black), .foregroundColor: UIColor.black])
+            return NSAttributedString(string: string, attributes: [.font:  UIFont(name: "Heebo-Bold", size: 10.0)!, .foregroundColor: UIColor.white])
             
         }
-        let labelTextAttributes: [NSAttributedString.Key : Any] = [.font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: UIColor.white]
+        let labelTextAttributes: [NSAttributedString.Key : Any] = [.font:  UIFont(name: "Heebo-Bold", size: 12.0)!, .foregroundColor: UIColor.white]
         
-        self.fraction = 0.05
+        self.fraction = 0.5
         self.shadowOffset = CGSize(width: 0, height: 10)
+        
+        // shadow
         self.shadowBlur = 5
-        self.shadowColor = UIColor(white: 0, alpha: 0.1)
-        self.contentViewColor = .gray
-        self.valueViewColor = .white
+        self.shadowColor =  UIColor(red: 71.0 / 255.0, green: 55.0 / 255.0, blue: 69.0 / 255.0, alpha: 0.0)
+        
+        // content
+        self.contentViewColor = UIColor(red: 89.0 / 255.0, green: 45.0 / 255.0, blue: 83.0 / 255.0, alpha: 0.2)
+        
+        
+        
         self.setMinimumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
         self.setMaximumLabelAttributedText(NSAttributedString(string: "", attributes: labelTextAttributes))
         
         self.imagesColor = UIColor.white
-        self.valueViewColor = .white
-        self.setMinimumImage(#imageLiteral(resourceName: "past"))
-        self.setMaximumImage(#imageLiteral(resourceName: "future"))
+        self.valueViewColor = UIColor(red: 176.0 / 255.0, green: 49.0 / 255.0, blue: 76.0 / 255.0, alpha: 1.0)
+        self.setMinimumImage(#imageLiteral(resourceName: "minusSign"))
+        self.setMaximumImage(#imageLiteral(resourceName: "plusSign"))
+        
         
 }
 

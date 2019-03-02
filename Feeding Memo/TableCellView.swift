@@ -20,31 +20,19 @@ public class TableCellView: UITableViewCell {
     @IBOutlet weak var LeftArrow: UIImageView!
     @IBOutlet weak var RightArrow: UIImageView!
     @IBOutlet weak var MainHour: UILabel!
-    @IBOutlet weak var NextHour: UILabel!
     @IBOutlet weak var ProgressBar: UIProgressView!
     @IBOutlet weak var ProgressLabel: UILabel!
     @IBOutlet weak var NextLabel: UILabel!
     
-    @IBOutlet weak var DurationLabel: UILabel!
+    @IBOutlet weak var cellCellBgView: UIImageView!
+    @IBOutlet weak var cellCellHeight: NSLayoutConstraint!
     override public func prepareForReuse() {
-        MainHour.text = ""
-        NextHour.text = ""
-        ProgressLabel.text = ""
+        MainHour?.text = "" 
+        ProgressLabel?.text = ""
     }
     
-    public func set(feedingSession : FeedingSession, prevFeeding : Date){
+    public func set(feedingSession : FeedingSession, prevFeeding : Date, isOnTop : Bool){
         MainHour.text = HourFormatter.formatDate(feedingSession.EndTime)
-        
-        if(feedingSession.Duration > 10) {
-            ProgressBar.tintColor = UIColor(named : "SoftGeen")
-            ProgressLabel.textColor = UIColor(named: "SoftGreenText")
-        }else{
-            ProgressBar.tintColor = UIColor(named: "SoftRed")
-            ProgressLabel.textColor = UIColor(named: "SoftRedText")
-        }
-        
-        
-        DurationLabel.text = "\(feedingSession.colloquialTimeDistance(date: prevFeeding))"
         
         NextLabel.text = feedingSession.colloquialTimeAgo()
         
@@ -52,13 +40,27 @@ public class TableCellView: UITableViewCell {
         
         ProgressLabel.text = "Duration".localized + ": \(feedingSession.Duration) min"
         
-        RightArrow.alpha = feedingSession.Side == .Left ? 0.3 : 1
-        LeftArrow.alpha = feedingSession.Side == .Right  ? 0.3 : 1
+ 
+        if feedingSession.Side == .Left {
+            LeftArrow.tintColor = UIColor(named : "pinkishTan")
+            RightArrow.tintColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        } else if feedingSession.Side == .Right {
+            LeftArrow.tintColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            RightArrow.tintColor = UIColor(named : "pinkishTan")
+            
+        }
         
+        NextLabel.isHidden = !isOnTop
+        cellCellHeight.constant = isOnTop ? 47 : 35
+       
+        cellCellBgView.image = UIImage(named:  (isOnTop ? "buttonBgLarge" : "buttonBg"))
+        
+        
+        self.backgroundColor = UIColor.clear
+        RightArrow.transform = CGAffineTransform(scaleX: -1, y: 1);
     }
     
    
-    
     private func getProgressFloat(duration : Int) -> Float{
          
         return (Float(duration) / Float(const.prefferedFeedTime))
