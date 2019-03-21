@@ -26,18 +26,7 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
     
     let reminderService = ReminderService()
     
-    @IBAction func ReminderSwitchDidChange(_ sender: Any) {
-//        if RemindSwitch.isOn {
-//            reminderService.addFeedingReminder(fromSession: feedData.first)
-//        } else {
-//            reminderService.removeReminder()
-//        }
-       // updateIntervalLabel()
-        self.tableView.reloadData()
-    }
-    
-    
-    
+  
     var feedData : [FeedingSession] = []
     var sections : [DaySection] = []
     
@@ -96,42 +85,11 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
         return dateFormatter.string(from: section.day)
     }
     
-    func updateIntervalLabel1 () {
-//        reminderService.getNextReminderTime() { intervalText in
-//
-//            DispatchQueue.main.async {
-        
-//                self.RemindSwitch.isOn = intervalText != nil
-//
-//                if let interval = intervalText {
-//                    self.nextFeedingCountdownLabel.text = "\(interval)"
-//                }
-//                else
-//                {
-//                    if(self.feedData.count > 0){
-//
-//                        let ft = FeedingTime(feedingSession: self.feedData.first!)
-//
-//                        if ft.nextFeedingInterval() > 0 {
-//                            self.nextFeedingCountdownLabel.text = ft.redableNextFeedingInterval()
-//                        } else {
-//                            self.nextFeedingCountdownLabel.text = FeedingTime.defaultRedableNextFeedingTime()
-//                        }
-//                    }else{
-//                         self.nextFeedingCountdownLabel.text = FeedingTime.defaultRedableNextFeedingTime()
-//                    }
-//
-//                }
-//            }
-        //}
-        
-    }
     
     func initComponents(){
         tableView.delegate = self
         tableView.dataSource = self
-        // reminder
-       // updateIntervalLabel()
+      
         
         //drawer
         maskView = MaskView(
@@ -149,18 +107,6 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
         view.addSubview(titSelector)
         
         titSelector.layer.zPosition = 1001
-//        //bell button
-//        bell = UIButton(
-//            frame: CGRect(x: (view.frame.width / 2) - (tableViewConsts.buttonSize / 2) - 50 , y: view.frame.height - tableViewConsts.bottomMargin, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize))
-//        
-//        bell.setImage(#imageLiteral(resourceName: "bell"), for: .normal)
-//        bell.setImage(#imageLiteral(resourceName: "bell"), for: .selected)
-//        bell.tintColor = #colorLiteral(red: 0.8349999785, green: 0.5609999895, blue: 0.474999994, alpha: 1)
-//        bell.contentMode = .scaleToFill
-        
-        
-//        view.addSubview(bell)
-        
         
         //slider
         slider = DurationSlider(frame : CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
@@ -251,19 +197,11 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
     {
         
 	        if indexPath.row == 0 && indexPath.section == 0 {
-            return 65.0;
+            return 58.0;
         }
-        return 50.0;//Choose your custom row height
+        return 50.0;
     }
-//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//
-//        if(section == 0){
-//            return 40
-//        }else{
-//            return 10
-//        }
-//
-//    }
+    
     internal override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let section = self.sections[indexPath.section]
@@ -301,17 +239,15 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        if section == 0 {
-            return UIView()
-        }
-        
+        let textToDisplay = self.tableView(tableView, titleForHeaderInSection: section) ?? "";
+  
         let view = UIView(frame: CGRect(x: 20, y: section == 0 ? 30 : 10, width: 200, height: 30))
         view.isUserInteractionEnabled = false
         let label = UILabel(frame: CGRect(x: 0, y:section == 0 ? 28 : 8, width: 200, height: 30))
         label.transform =  CGAffineTransform(translationX: 20.0, y: 0)
         label.textAlignment = .left
         label.tag = section
-        let text =  NSAttributedString(string: self.tableView(tableView, titleForHeaderInSection: section) ?? "", attributes: [.font:  UIFont(name: "Heebo-Light", size: 12.0)!, .foregroundColor: #colorLiteral(red: 0.3695555983, green: 0.3659325042, blue: 0.3659325042, alpha: 1)])
+        let text =  NSAttributedString(string: textToDisplay, attributes: [.font:  UIFont(name: "Heebo-Light", size: 12.0)!, .foregroundColor: #colorLiteral(red: 0.3695555983, green: 0.3659325042, blue: 0.3659325042, alpha: 1)])
         label.isUserInteractionEnabled = false
         label.attributedText = text
         view.addSubview(label)
@@ -328,7 +264,6 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
             reloadDataSource()
             
             self.tableView.reloadData()
-           // self.updateIntervalLabel()
            
         }
     }
@@ -352,9 +287,7 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
         
         slider.frame =
             CGRect(x: 25, y: view.frame.height - tableViewConsts.bottomMargin - 50 + dy + 20, width: view.frame.width - 50, height: tableViewConsts.buttonSize)
-//
-//        bell.frame =    CGRect(x: (view.frame.width) - (tableViewConsts.buttonSize + 8), y: 20 + dy, width: tableViewConsts.buttonSize, height: tableViewConsts.buttonSize)
-//
+ 
         if (!scrollView.isDecelerating){
             maskView.fadeOut()
             titSelector.hideButtons(0.2)
@@ -398,18 +331,30 @@ class TableViewController: UITableViewController, UIGestureRecognizerDelegate, C
             self.tableView.insertRows(at: [indexPath], with: .automatic)
             // insert row in table
             
-            self.tableView.endUpdates()
+            
             
             if self.hint != nil {
                 self.hint!.removeFromSuperview()
             }
+            self.tableView.endUpdates()
             
-//            if self.RemindSwitch.isOn {
-//                self.reminderService.addFeedingReminder(fromSession: self.feedData.first)
-//            }
+            if newSection && self.sections.count > 1 {
+                
+                let firstCellInOtherSection = self.tableView(self.tableView, cellForRowAt:  IndexPath(row: 0, section: 1)) as! TableCellView
+                
+                firstCellInOtherSection.NextLabel.isHidden = true
+                firstCellInOtherSection.cellCellHeight.constant = 35
+                firstCellInOtherSection.setNeedsDisplay()
+                firstCellInOtherSection.reloadInputViews()
+                
+                self.tableView.reloadSections(IndexSet([1]), with: .bottom)
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
+              
+            } else if self.sections[0].feeding.count > 1 {
+              self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+            }
             
-            //self.updateIntervalLabel()
-            
+              self.reloadDataSource()
         }
     }
     

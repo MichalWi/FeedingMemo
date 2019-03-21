@@ -22,7 +22,7 @@ public class FeedingSessionService {
         let data = try? Disk.retrieve(defaultsKeys.dataKey, from: Disk.Directory.documents, as: [FeedingSession].self)
         
         if data != nil {
-            feedingSessions = data!
+            feedingSessions = data! 
         }
     }
     
